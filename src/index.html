@@ -58,26 +58,26 @@
     <div id="product-list" class="product-list container"></div>
 
     <script id="template-menu-product" type="text/x-handlebars-template">
-      <article class="product active"> <!-- product -->
+      <article class="product"> <!-- product -->
 
           <header class="product__header">
-            <h3 class="product__name no-spacing">{{ name }} <i class="fas fa-chevron-down product__icon"></i></h3>
-            <p class="product__base-price no-spacing">${{ price }}</p>
+            <h3 class="product__name no-spacing">'Title - '{{ name }} <i class="fas fa-chevron-down product__icon"></i></h3>
+            <p class="product__base-price no-spacing">'Price - '${{ price }}</p>
           </header>
           <div class="product__description"> <!-- description -->
-            <p>{{{ description }}}</p>
+            <p>'Description -'{{{ description }}}</p>
           </div> <!-- .description -->
           <div class="product__wrapper"> <!-- details -->
             <form class="product__order">
               <ul class="product__params"> <!-- params -->
                 {{#each params as |param paramId| }}
                 {{#ifEquals type "checkboxes"}}
-                <li> <!-- checkboxes -->
-                  <h3 class="product__params-title">{{{ label }}}</h3>
+                <li> <!-- checkboxes1 -->
+                  <h3 class="product__params-title">{{{ label }}} "label"</h3>
                   {{#each options}}
-                  <div class="checkbox"> <!-- checkbox -->
+                  <div class="checkbox"> <!-- checkbox2 -->
                     <label>
-                      <input type="checkbox" name="{{ paramId }}" value="{{ @key }}" id="{{ @key }}" {{#if default}}checked{{/if}}>
+                      <input type="checkbox" value="{{ @key }}" id="{{ @key }}" {{#if default}}checked{{/if}}>
                       <span class="checkbox__checkmark"></span>
                       {{{ label }}} (${{{ price }}})
                     </label>
