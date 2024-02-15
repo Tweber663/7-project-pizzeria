@@ -58,11 +58,12 @@ const select = {
       thisProduct.id = id;
       thisProduct.data = data;
       thisProduct.renderInMenu();
+      thisProduct.initAccodrion();
     }
       renderInMenu() { // Responsbile for rendeing information on our website
         const thisProduct = this; 
 
-        /*generating HTML based on template*/
+        /*generating HTML based on template using handlebars*/
         const generateHTML = templates.menuProduct(thisProduct.data);
         
         /* create element using utils.createElementFromHtml 'functions.js'*/
@@ -73,6 +74,29 @@ const select = {
 
         /* add element to menu*/ 
         menuContainer.appendChild(thisProduct.element);
+      }
+      initAccodrion() {
+        const thisProduct = this;
+
+        /* find clickable trigger */
+        const clickableTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
+       
+        /*event Listener clickable trigger */
+        clickableTrigger.addEventListener('click', function(e) {
+          e.preventDefault();
+        /* searches for all products with 'active' class */
+         const activeProducts = document.querySelectorAll('.product.active');
+         console.log(activeProducts);
+
+        /*Toggle 'active' class on '<article class="product"> */
+        clickableTrigger.parentElement.classList.toggle('active');
+
+        /* Removes a 'active' class from the first clicked product */
+        if (activeProducts[0]) {
+          activeProducts[0].classList.remove('active');
+        } 
+        })
+        
       }
   
   }
