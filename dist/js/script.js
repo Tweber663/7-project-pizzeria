@@ -58,7 +58,10 @@ const select = {
       thisProduct.id = id;
       thisProduct.data = data;
       thisProduct.renderInMenu();
+      thisProduct.getElements();
       thisProduct.initAccodrion();
+      thisProduct.initOrderForm();
+      thisProduct.processOrder();
     }
       renderInMenu() { // Responsbile for rendeing information on our website
         const thisProduct = this; 
@@ -75,31 +78,74 @@ const select = {
         /* add element to menu*/ 
         menuContainer.appendChild(thisProduct.element);
       }
+
+      getElements(){
+          const thisProduct = this;
+          /*clicable trigger saved to global class settings '<header class="product__header">'*/
+          thisProduct.accordionTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
+         
+         /*form */
+          thisProduct.form = thisProduct.element.querySelector(select.menuProduct.form)
+         
+         /*form inputs*/
+          thisProduct.formInputs = thisProduct.form.querySelectorAll(select.all.formInputs)
+
+         /*cart button*/
+          thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
+         
+          /*total price */
+          thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
+         }
+      
       initAccodrion() {
         const thisProduct = this;
 
-        /* find clickable trigger */
-        const clickableTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
-       
         /*event Listener clickable trigger */
-        clickableTrigger.addEventListener('click', function(e) {
+        thisProduct.accordionTrigger.addEventListener('click', function(e) {
           e.preventDefault();
-        /* searches for all products with 'active' class */
+       
+          /* searches for all products with 'active' class */
          const activeProducts = document.querySelectorAll('.product.active');
-         console.log(activeProducts);
-
-        /*Toggle 'active' class on '<article class="product"> */
-        clickableTrigger.parentElement.classList.toggle('active');
-
+        
+         /*Toggle 'active' class on '<article class="product"> */
+        thisProduct.accordionTrigger.parentElement.classList.toggle('active');
+       
         /* Removes a 'active' class from the first clicked product */
         if (activeProducts[0]) {
           activeProducts[0].classList.remove('active');
         } 
         })
-        
       }
-  
+      initOrderForm() {
+        const thisProduct = this;
+
+      /*Listening to from */
+        thisProduct.form.addEventListener('submit', function(event) {
+          event.preventDefault();
+          thisProduct.processOrder();
+        })
+      /*listetning to form inputs */
+      for (let input of thisProduct.formInputs) {
+        input.addEventListener('change', function() {
+          thisProduct.processOrder();
+        })
+      }
+
+      thisProduct.cartButton.addEventListener('click', function(event) {
+        event.preventDefault();
+        thisProduct.processOrder();
+      })
+
+
+      }
+
+      processOrder() {
+        const thisProduct = this;
+        console.log('hello')
+      }
   }
+
+  
 
   const app = {
     initMenu() {  // <-- Cycling through each 'product' inside 'dataSource'  
