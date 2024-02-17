@@ -73,11 +73,11 @@
                 {{#each params as |param paramId| }}
                 {{#ifEquals type "checkboxes"}}
                 <li> <!-- checkboxes1 -->
-                  <h3 class="product__params-title">{{{ label }}} "label"</h3>
+                  <h3 class="product__params-title">{{{ label }}}</h3>
                   {{#each options}}
                   <div class="checkbox"> <!-- checkbox2 -->
                     <label>
-                      <input type="checkbox" value="{{ @key }}" id="{{ @key }}" {{#if default}}checked{{/if}}>
+                      <input type="checkbox" value="{{ @key }}" name="{{ paramId }}" {{#if default}}checked{{/if}}>
                       <span class="checkbox__checkmark"></span>
                       {{{ label }}} (${{{ price }}})
                     </label>

@@ -118,34 +118,66 @@ const select = {
       }
       initOrderForm() {
         const thisProduct = this;
-
       /*Listening to from */
         thisProduct.form.addEventListener('submit', function(event) {
           event.preventDefault();
           thisProduct.processOrder();
         })
-      /*listetning to form inputs */
+      /*listetning to form inputs (radios etc..) */
       for (let input of thisProduct.formInputs) {
         input.addEventListener('change', function() {
           thisProduct.processOrder();
         })
       }
-
+      /*Listenting to cart button */
       thisProduct.cartButton.addEventListener('click', function(event) {
         event.preventDefault();
         thisProduct.processOrder();
       })
-
-
       }
+
 
       processOrder() {
         const thisProduct = this;
-        console.log('hello')
-      }
-  }
-
+        //Converting FORM to object strocture e.g {sauce: 'tomato etc]}
+        const formData = utils.serializeFormToObject(thisProduct.form);
+        console.log(formData)
   
+        //set price to default amount
+        let price = thisProduct.data.price
+
+        //for every category (param)....
+        for (let paramId in thisProduct.data.params) {
+          
+          const param = thisProduct.data.params[paramId];
+          console.log(`Dish name: "${thisProduct.data.name}🥗"`, paramId);
+
+        
+          //for every option in this category 
+          for (let optionId in param.options) {
+            const option = param.options[optionId]; 
+
+             /* check if there is param with the name of paramId in formData and if it includes optionId */
+             const selectedOptions = formData[paramId].includes(optionId);
+
+             /*if option is selected it adds the cost to TOTAL COST */
+             if (selectedOptions === true) {
+             price += param.options[optionId].price;
+             }
+
+             /* checking for default options */
+             if (param.options[optionId].default) {
+              price -= param.options[optionId].price;
+             }
+
+            }
+      }
+      console.log(price);
+      //update calculate price in the HTML 
+      thisProduct.priceElem.innerHTML = price;
+  }
+}
+
 
   const app = {
     initMenu() {  // <-- Cycling through each 'product' inside 'dataSource'  
