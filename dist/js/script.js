@@ -77,6 +77,7 @@ const select = {
 
         /* add element to menu*/ 
         menuContainer.appendChild(thisProduct.element);
+        
       }
 
       getElements(){
@@ -95,7 +96,10 @@ const select = {
          
           /*total price */
           thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
-         }
+        
+          /* Grabbing image warpper */
+          thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
+        }
       
       initAccodrion() {
         const thisProduct = this;
@@ -141,38 +145,58 @@ const select = {
         const thisProduct = this;
         //Converting FORM to object strocture e.g {sauce: 'tomato etc]}
         const formData = utils.serializeFormToObject(thisProduct.form);
-        console.log(formData)
   
         //set price to default amount
         let price = thisProduct.data.price
 
-        //for every category (param)....
+        //loops every category (param)....
         for (let paramId in thisProduct.data.params) {
           
           const param = thisProduct.data.params[paramId];
           console.log(`Dish name: "${thisProduct.data.name}🥗"`, paramId);
 
         
-          //for every option in this category 
+          //loops every option in this category 
           for (let optionId in param.options) {
             const option = param.options[optionId]; 
 
-             /* check if there is param with the name of paramId in formData and if it includes optionId */
+             /* checks if there is paramId in formData and if it includes optionsId */
              const selectedOptions = formData[paramId].includes(optionId);
 
-             /*if option is selected it adds the cost to TOTAL COST */
-             if (selectedOptions === true) {
-             price += param.options[optionId].price;
-             }
 
-             /* checking for default options */
+             /*Checks if option is selected */
+             if (selectedOptions === true) {
+              /*if true, it adds the cost of each option to total amount */
+             price += param.options[optionId].price;
+             
+             /* using the option category (paramID) & option type )optionID we're creating a class selector*/
+             const className = `.${paramId}-${optionId}`;
+             
+             /* Searching for the imgs using the class selector created above*/
+             thisProduct.imgDOM = document.querySelector(className);
+
+             /* some img return as null because the selector that we created also searches for images technically doesn't exsist*/
+             /* Before we can start adding & removing 'active' class, we gotta make sure that our results don't return null*/
+             thisProduct.imgDOM !== null? thisProduct.imgDOM.classList.add('active') : console.log(null)
+             
+             /*if option is FALSE (not selected */
+            } else {
+              const className = `.${paramId}-${optionId}`;
+              thisProduct.imgDOM = document.querySelector(className);
+              thisProduct.imgDOM !== null? thisProduct.imgDOM.classList.remove('active') : console.log(null);
+              }
+
+             
+             
+            
+
+             /* If option is default it takes away the option cost from the to total amount */
              if (param.options[optionId].default) {
               price -= param.options[optionId].price;
              }
 
             }
       }
-      console.log(price);
       //update calculate price in the HTML 
       thisProduct.priceElem.innerHTML = price;
   }
