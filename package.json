@@ -11,7 +11,7 @@
         "init:gitignore:custom": "echo \"dist\" >> .gitignore",
         "test": "npm-run-all test:*",
         "test:html": "html-validate src/*.html",
-        "test:js": "eslint --fix src/js/",
+        "test:js": "eslint src/js/",
         "test:scss": "stylelint --fix src/sass/",
         "build": "npm-run-all build:* test",
         "build:clean": "rimraf dist && mkdirp dist",

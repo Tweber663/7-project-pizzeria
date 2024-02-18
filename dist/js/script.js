@@ -158,11 +158,9 @@ const select = {
         
           //loops every option in this category 
           for (let optionId in param.options) {
-            const option = param.options[optionId]; 
 
              /* checks if there is paramId in formData and if it includes optionsId */
              const selectedOptions = formData[paramId].includes(optionId);
-
 
              /*Checks if option is selected */
              if (selectedOptions === true) {
@@ -171,7 +169,6 @@ const select = {
              
              /* using the option category (paramID) & option type )optionID we're creating a class selector*/
              const className = `.${paramId}-${optionId}`;
-             
              /* Searching for the imgs using the class selector created above*/
              thisProduct.imgDOM = document.querySelector(className);
 
@@ -179,15 +176,12 @@ const select = {
              /* Before we can start adding & removing 'active' class, we gotta make sure that our results don't return null*/
              thisProduct.imgDOM !== null? thisProduct.imgDOM.classList.add('active') : console.log(null)
              
-             /*if option is FALSE (not selected */
+             /*Oppostie to what it is above -if option is FALSE (not selected) */
             } else {
               const className = `.${paramId}-${optionId}`;
               thisProduct.imgDOM = document.querySelector(className);
               thisProduct.imgDOM !== null? thisProduct.imgDOM.classList.remove('active') : console.log(null);
               }
-
-             
-             
             
 
              /* If option is default it takes away the option cost from the to total amount */
