@@ -33,12 +33,12 @@ const select = {
     },
   };
 
-  const classNames = {
-    menuProduct: {
-      wrapperActive: 'active',
-      imageVisible: 'active',
-    },
-  };
+  // const classNames = {
+  //   menuProduct: {
+  //     wrapperActive: 'active',
+  //     imageVisible: 'active',
+  //   },
+  // };
 
   const settings = {
     amountWidget: {
@@ -61,6 +61,7 @@ const select = {
       thisProduct.getElements();
       thisProduct.initAccodrion();
       thisProduct.initOrderForm();
+      thisProduct.initAmountWidget();
       thisProduct.processOrder();
     }
       renderInMenu() { // Responsbile for rendeing information on our website
@@ -99,7 +100,18 @@ const select = {
         
           /* Grabbing image warpper */
           thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
+        
+          /*Widget element*/
+          thisProduct.amountWidgetElem = thisProduct.element.querySelector(select.menuProduct.amountWidget);
         }
+
+      initAmountWidget() {
+        const thisProduct = this; 
+
+        /*Creating a new class instand & passing widget wrapper element*/ 
+        thisProduct.amountWidget = new AmountWidget(thisProduct.amountWidgetElem);
+      
+      }
       
       initAccodrion() {
         const thisProduct = this;
@@ -120,6 +132,7 @@ const select = {
         } 
         })
       }
+
       initOrderForm() {
         const thisProduct = this;
       /*Listening to from */
@@ -153,7 +166,7 @@ const select = {
         for (let paramId in thisProduct.data.params) {
           
           const param = thisProduct.data.params[paramId];
-          console.log(`Dish name: "${thisProduct.data.name}🥗"`, paramId);
+          // console.log(`Dish name: "${thisProduct.data.name}🥗"`, paramId);
 
         
           //loops every option in this category 
@@ -174,13 +187,13 @@ const select = {
 
              /* some img return as null because the selector that we created also searches for images technically doesn't exsist*/
              /* Before we can start adding & removing 'active' class, we gotta make sure that our results don't return null*/
-             thisProduct.imgDOM !== null? thisProduct.imgDOM.classList.add('active') : console.log(null)
+             thisProduct.imgDOM !== null? thisProduct.imgDOM.classList.add('active') : null
              
              /*Oppostie to what it is above -if option is FALSE (not selected) */
             } else {
               const className = `.${paramId}-${optionId}`;
               thisProduct.imgDOM = document.querySelector(className);
-              thisProduct.imgDOM !== null? thisProduct.imgDOM.classList.remove('active') : console.log(null);
+              thisProduct.imgDOM !== null? thisProduct.imgDOM.classList.remove('active') : null;
               }
             
 
@@ -195,6 +208,79 @@ const select = {
       thisProduct.priceElem.innerHTML = price;
   }
 }
+
+class AmountWidget {
+  constructor(element) {
+    const thisWidget = this;
+
+    /*passing as argumnet widget wrapper */
+    thisWidget.getElements(element);
+    thisWidget.setValue(thisWidget.input.value)
+    thisWidget.initActions(); 
+
+    console.log('AmountWidget:', thisWidget);
+    console.log('Constructor arguments', element);
+  }
+
+  getElements(element) {
+    const thisWidget = this;
+    /*widget wrapper for individual product */
+    thisWidget.element = element;
+    /*widget 'input' element*/
+    thisWidget.input = thisWidget.element.querySelector(select.widgets.amount.input);
+    /*widget 'add' element*/
+    thisWidget.linkDecrease = thisWidget.element.querySelector(select.widgets.amount.linkDecrease);
+    /*widget 'subtract' element*/
+    thisWidget.linkIncrease = thisWidget.element.querySelector(select.widgets.amount.linkIncrease);
+  }
+
+  setValue(value) {
+    const thisWidget = this; 
+    
+    /*changes input value from string to num */
+    const newValue = parseInt(value);
+
+   /* TODO: Add validation */
+    if(thisWidget.value !== newValue && !isNaN(newValue) && newValue > settings.amountWidget.defaultMin && newValue <= settings.amountWidget.defaultMax) {
+        thisWidget.value = newValue;
+        thisWidget,this.announce
+    }
+    thisWidget.input.value = thisWidget.value
+
+  }
+
+  initActions() {
+    const thisWidget = this; 
+
+    /*Looking for changes inside the widget input */
+    thisWidget.input.addEventListener('change', function(){
+      thisWidget.setValue(thisWidget.input.value);
+    })
+
+    /* Listetning to subtract button + subtracting the value by 1*/
+    thisWidget.linkDecrease.addEventListener('click', function(e){
+      e.preventDefault();
+      thisWidget.setValue(thisWidget.value - 1);
+    })
+
+    /* Listetning to add button + insreasing the value by 1*/
+    thisWidget.linkIncrease.addEventListener('click', function(e) {
+      e.preventDefault();
+      thisWidget.setValue(thisWidget.value + 1);
+    })
+  }
+
+  /*our custom event listener */
+  announce() {
+    const thisWidget = this; 
+
+    const event = new Event('updated');
+    thisWidget.element.dispatchEvent(event);
+
+  }
+
+
+} 
 
 
   const app = {
@@ -214,11 +300,11 @@ const select = {
 
     init() {
       const thisApp = this; 
-      console.log('***App starting***');
-      console.log('thisApp:', thisApp);
-      console.log('classNmaes', classNames);
-      console.log('settings', settings);
-      console.log('templates', templates);
+      // console.log('***App starting***');
+      // console.log('thisApp:', thisApp);
+      // console.log('classNmaes', classNames);
+      // console.log('settings', settings);
+      // console.log('templates', templates);
       
       thisApp.initData(); // 1st 
       thisApp.initMenu(); // 2nd 
@@ -227,3 +313,6 @@ const select = {
 
    app.init();
   }
+
+
+  
