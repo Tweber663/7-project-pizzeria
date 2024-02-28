@@ -110,6 +110,9 @@ const select = {
 
         /*Creating a new class instand & passing widget wrapper element*/ 
         thisProduct.amountWidget = new AmountWidget(thisProduct.amountWidgetElem);
+        thisProduct.amountWidgetElem.addEventListener('updated', function() {
+          thisProduct.processOrder();
+        });
       
       }
       
@@ -204,6 +207,11 @@ const select = {
 
             }
       }
+
+      /* Responbile multiplaying the price bsed on quantity amount (widget) */
+      console.log(thisProduct.amountWidget.value);
+      price*= thisProduct.amountWidget.value;
+
       //update calculate price in the HTML 
       thisProduct.priceElem.innerHTML = price;
   }
@@ -215,7 +223,10 @@ class AmountWidget {
 
     /*passing as argumnet widget wrapper */
     thisWidget.getElements(element);
-    thisWidget.setValue(thisWidget.input.value)
+    /*Widget starting value*/
+
+    thisWidget.input.value? thisWidget.setValue(thisWidget.input.value) : thisWidget.setValue(settings.amountWidget.defaultValue);
+
     thisWidget.initActions(); 
 
     console.log('AmountWidget:', thisWidget);
@@ -243,7 +254,7 @@ class AmountWidget {
    /* TODO: Add validation */
     if(thisWidget.value !== newValue && !isNaN(newValue) && newValue > settings.amountWidget.defaultMin && newValue <= settings.amountWidget.defaultMax) {
         thisWidget.value = newValue;
-        thisWidget,this.announce
+        thisWidget.announce();
     }
     thisWidget.input.value = thisWidget.value
 
@@ -300,12 +311,6 @@ class AmountWidget {
 
     init() {
       const thisApp = this; 
-      // console.log('***App starting***');
-      // console.log('thisApp:', thisApp);
-      // console.log('classNmaes', classNames);
-      // console.log('settings', settings);
-      // console.log('templates', templates);
-      
       thisApp.initData(); // 1st 
       thisApp.initMenu(); // 2nd 
     }
