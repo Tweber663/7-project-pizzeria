@@ -214,25 +214,46 @@
         /*this thing is hooked up to a form, an
         d tranfroms selected items into an object*/
         const formData = utils.serializeFormToObject(thisProduct.dom.form);
+        console.log('selected extras 📋', formData);
 
+        let selectedExtras = {
+
+        };
 
        /*First we cycle throught extras 'CATEGORY', source, crust etc..*/
        /*[thisProduct.data.par..] All Objects {sauce: {…}, toppings: {…}, crust: {…}}*/
        /*[paramID] individual object names ONLY*/ 
         for (let paramId in thisProduct.data.params) {
         /*using the object name, on the object, to acess it and all it's info */
-          const paramObject = thisProduct.data.params[paramId];
-          console.log(paramObject);
+          const extrasObject = thisProduct.data.params[paramId];
+          console.log('Extras Category 🔴', extrasObject);
           
           /*Cycling throught individual toppings following the logic above */
-          for (let toppingId in paramObject.options) {
+          for (let toppingId in extrasObject.options) {
+          const extrasItems = extrasObject.options[toppingId];
+          console.log('Extras Items 🔻', extrasItems);
 
-            console.log(paramObject.options[toppingId]);
+          if (formData[paramId].includes(toppingId)) {
+            console.log(paramId);
+
+           selectedExtras += {
+            jake: extrasItems.label
+           }
+            
+            // selectedExtras = {
+            //   [paramId]: {
+            //     label: extrasObject.label,
+            //     options: {
+            //       [toppingId]: extrasItems.label,
+            //     }
+            //   }
+            // }
+          } else {
+            console.log(false);
           }
-         
-
+          }
         }
-
+        console.log(selectedExtras);
         // const selected = {
         //   ingredients: thisProduct.data.params.ingredients.label,
         // }
@@ -251,7 +272,6 @@
         const thisProduct = this;
         //Converting FORM to object strocture e.g {sauce: 'tomato etc]}
         const formData = utils.serializeFormToObject(thisProduct.dom.form);
-        console.log('form Data:', formData);
   
         //set price to default amount
         let price = thisProduct.data.price
