@@ -169,7 +169,7 @@
 
       initOrderForm() {
         const thisProduct = this;
-      /*Listening to from */
+      /*Listening to formm */
         thisProduct.dom.form.addEventListener('submit', function(event) {
           event.preventDefault();
           thisProduct.processOrder();
@@ -183,9 +183,30 @@
       /*Listenting to cart button */
       thisProduct.dom.cartButton.addEventListener('click', function(event) {
         event.preventDefault();
+
+        thisProduct.addToCart(); /*triggering a function */
         thisProduct.processOrder();
       })
       }
+
+      /*1.Preparing cart elem befor they are added*/
+      prepareCartProduct() {
+        const thisProduct = this;
+
+        /*brief summary of entire product that contains 'only' nedded info*/ 
+        productSUmmary = [];
+
+      }
+      
+
+      /*2.Adding elements to our'cart' CLASS*/
+      addToCart() {
+        const thisProduct = this; 
+
+        /*We're triggering our Cart class + passing a refrence / instant*/
+        app.cart.add(thisProduct);   
+      }
+
       processOrder() {
         const thisProduct = this;
         //Converting FORM to object strocture e.g {sauce: 'tomato etc]}
@@ -244,6 +265,7 @@
       //update calculate price in the HTML 
       thisProduct.dom.priceElem.innerHTML = price;
       }
+
 }
 
 class AmountWidget {
@@ -306,6 +328,7 @@ class AmountWidget {
       thisWidget.setValue(thisWidget.value + 1);
     })
   }
+  
 
   /*our custom event listener */
   announce() {
@@ -345,9 +368,19 @@ class Cart {
   initActions() {
     const thisCart = this;
 
+    /*Toggling basket visiblity */
     thisCart.dom.toggleTrigger.addEventListener('click', function() {
       thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive)
     })
+  }
+
+  add(menuProduct) {
+  /* 'menuProduct' argument comes from 'addToCart()'and is giving
+   us acess to product instand after add to cart is pressed*/
+   
+   const thisCart = this;
+    
+    console.log('adding product:', menuProduct);
   }
 }
 
