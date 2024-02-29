@@ -3,9 +3,10 @@
 {
   'use strict';
 
-const select = {
-  templateOf: {
-    menuProduct: "#template-menu-product",
+  const select = {
+    templateOf: {
+      menuProduct: '#template-menu-product',
+      cartProduct: '#template-cart-product', // CODE ADDED
     },
     containerOf: {
       menu: '#product-list',
@@ -26,30 +27,63 @@ const select = {
     },
     widgets: {
       amount: {
-        input: 'input[name="amount"]',
+        input: 'input.amount', // CODE CHANGED
         linkDecrease: 'a[href="#less"]',
         linkIncrease: 'a[href="#more"]',
       },
     },
+    // CODE ADDED START
+    cart: {
+      productList: '.cart__order-summary',
+      toggleTrigger: '.cart__summary',
+      totalNumber: `.cart__total-number`,
+      totalPrice: '.cart__total-price strong, .cart__order-total .cart__order-price-sum strong',
+      subtotalPrice: '.cart__order-subtotal .cart__order-price-sum strong',
+      deliveryFee: '.cart__order-delivery .cart__order-price-sum strong',
+      form: '.cart__order',
+      formSubmit: '.cart__order [type="submit"]',
+      phone: '[name="phone"]',
+      address: '[name="address"]',
+    },
+    cartProduct: {
+      amountWidget: '.widget-amount',
+      price: '.cart__product-price',
+      edit: '[href="#edit"]',
+      remove: '[href="#remove"]',
+    },
+    // CODE ADDED END
   };
-
-  // const classNames = {
-  //   menuProduct: {
-  //     wrapperActive: 'active',
-  //     imageVisible: 'active',
-  //   },
-  // };
-
+  
+  const classNames = {
+    menuProduct: {
+      wrapperActive: 'active',
+      imageVisible: 'active',
+    },
+    // CODE ADDED START
+    cart: {
+      wrapperActive: 'active',
+    },
+    // CODE ADDED END
+  };
+  
   const settings = {
     amountWidget: {
       defaultValue: 1,
-      defaultMin: 0,
-      defaultMax: 10,
-    }
+      defaultMin: 1,
+      defaultMax: 9,
+    }, // CODE CHANGED
+    // CODE ADDED START
+    cart: {
+      defaultDeliveryFee: 20,
+    },
+    // CODE ADDED END
   };
-
+  
   const templates = {
     menuProduct: Handlebars.compile(document.querySelector(select.templateOf.menuProduct).innerHTML),
+    // CODE ADDED START
+    cartProduct: Handlebars.compile(document.querySelector(select.templateOf.cartProduct).innerHTML),
+    // CODE ADDED END
   };
 
   class Product {
@@ -103,7 +137,7 @@ const select = {
         
           /*Widget element*/
           thisProduct.amountWidgetElem = thisProduct.element.querySelector(select.menuProduct.amountWidget);
-        }
+      }
 
       initAmountWidget() {
         const thisProduct = this; 
@@ -155,8 +189,6 @@ const select = {
         thisProduct.processOrder();
       })
       }
-
-
       processOrder() {
         const thisProduct = this;
         //Converting FORM to object strocture e.g {sauce: 'tomato etc]}
@@ -214,7 +246,7 @@ const select = {
 
       //update calculate price in the HTML 
       thisProduct.priceElem.innerHTML = price;
-  }
+      }
 }
 
 class AmountWidget {
@@ -228,9 +260,6 @@ class AmountWidget {
     thisWidget.input.value? thisWidget.setValue(thisWidget.input.value) : thisWidget.setValue(settings.amountWidget.defaultValue);
 
     thisWidget.initActions(); 
-
-    console.log('AmountWidget:', thisWidget);
-    console.log('Constructor arguments', element);
   }
 
   getElements(element) {
@@ -287,17 +316,35 @@ class AmountWidget {
 
     const event = new Event('updated');
     thisWidget.element.dispatchEvent(event);
-
   }
-
-
 } 
 
+class Cart {
+  constructor(element) {
+    const thisCart = this;
+
+    /* Storing basket items */
+    thisCart.products = [];
+
+    thisCart.getElements(element);
+
+    console.log('new card:', thisCart);
+  }
+
+  getElements(element) {
+    const thisCart = this;
+
+    /*dom refrences stored inside object */
+    thisCart.dom = {};
+
+    thisCart.dom.wrapper = element;
+
+  }
+}
 
   const app = {
     initMenu() {  // <-- Cycling through each 'product' inside 'dataSource'  
       const thisApp = this;
-      console.log('this app data', thisApp.data);
       for(let productData in thisApp.data.products) {  
         // Createting a new object based on the cycled info, 1st 'product value, 2nd, passed the 'product' object property
        new Product(productData, thisApp.data.products[productData])
@@ -320,4 +367,3 @@ class AmountWidget {
   }
 
 
-  
