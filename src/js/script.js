@@ -117,34 +117,31 @@
 
       getElements(){
           const thisProduct = this;
-          /*clicable trigger saved to global class settings '<header class="product__header">'*/
-          thisProduct.accordionTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
-         
-         /*form */
-          thisProduct.form = thisProduct.element.querySelector(select.menuProduct.form)
-         
-         /*form inputs*/
-          thisProduct.formInputs = thisProduct.form.querySelectorAll(select.all.formInputs)
 
-         /*cart button*/
-          thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
-         
+          thisProduct.dom = {
+          /*clicable trigger saved to global class settings '<header class="product__header">'*/
+          accordionTrigger: thisProduct.element.querySelector(select.menuProduct.clickable),
+          /*form */
+          form: thisProduct.element.querySelector(select.menuProduct.form),
+          /*form inputs*/
+          formInputs: document.querySelectorAll(select.all.formInputs),
+             /*cart button*/
+          cartButton: thisProduct.element.querySelector(select.menuProduct.cartButton),
           /*total price */
-          thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
-        
+          priceElem: thisProduct.element.querySelector(select.menuProduct.priceElem),
           /* Grabbing image warpper */
-          thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
-        
-          /*Widget element*/
-          thisProduct.amountWidgetElem = thisProduct.element.querySelector(select.menuProduct.amountWidget);
+          imageWrapper: thisProduct.element.querySelector(select.menuProduct.imageWrapper),
+           /*Widget element*/
+          amountWidgetElem: thisProduct.element.querySelector(select.menuProduct.amountWidget),
+          }
       }
 
       initAmountWidget() {
         const thisProduct = this; 
 
         /*Creating a new class instand & passing widget wrapper element*/ 
-        thisProduct.amountWidget = new AmountWidget(thisProduct.amountWidgetElem);
-        thisProduct.amountWidgetElem.addEventListener('updated', function() {
+        thisProduct.amountWidget = new AmountWidget(thisProduct.dom.amountWidgetElem);
+        thisProduct.dom.amountWidgetElem.addEventListener('updated', function() {
           thisProduct.processOrder();
         });
       
@@ -154,14 +151,14 @@
         const thisProduct = this;
 
         /*event Listener clickable trigger */
-        thisProduct.accordionTrigger.addEventListener('click', function(e) {
+        thisProduct.dom.accordionTrigger.addEventListener('click', function(e) {
           e.preventDefault();
        
           /* searches for all products with 'active' class */
          const activeProducts = document.querySelectorAll('.product.active');
         
          /*Toggle 'active' class on '<article class="product"> */
-        thisProduct.accordionTrigger.parentElement.classList.toggle('active');
+        thisProduct.dom.accordionTrigger.parentElement.classList.toggle('active');
        
         /* Removes a 'active' class from the first clicked product */
         if (activeProducts[0]) {
@@ -173,18 +170,18 @@
       initOrderForm() {
         const thisProduct = this;
       /*Listening to from */
-        thisProduct.form.addEventListener('submit', function(event) {
+        thisProduct.dom.form.addEventListener('submit', function(event) {
           event.preventDefault();
           thisProduct.processOrder();
         })
       /*listetning to form inputs (radios etc..) */
-      for (let input of thisProduct.formInputs) {
+      for (let input of thisProduct.dom.formInputs) {
         input.addEventListener('change', function() {
           thisProduct.processOrder();
         })
       }
       /*Listenting to cart button */
-      thisProduct.cartButton.addEventListener('click', function(event) {
+      thisProduct.dom.cartButton.addEventListener('click', function(event) {
         event.preventDefault();
         thisProduct.processOrder();
       })
@@ -192,7 +189,7 @@
       processOrder() {
         const thisProduct = this;
         //Converting FORM to object strocture e.g {sauce: 'tomato etc]}
-        const formData = utils.serializeFormToObject(thisProduct.form);
+        const formData = utils.serializeFormToObject(thisProduct.dom.form);
   
         //set price to default amount
         let price = thisProduct.data.price
@@ -245,7 +242,7 @@
       price*= thisProduct.amountWidget.value;
 
       //update calculate price in the HTML 
-      thisProduct.priceElem.innerHTML = price;
+      thisProduct.dom.priceElem.innerHTML = price;
       }
 }
 
@@ -326,8 +323,10 @@ class Cart {
     /* Storing basket items */
     thisCart.products = [];
 
+    /*init dom elements */
     thisCart.getElements(element);
 
+    thisCart.initActions();
     console.log('new card:', thisCart);
   }
 
@@ -335,10 +334,20 @@ class Cart {
     const thisCart = this;
 
     /*dom refrences stored inside object */
-    thisCart.dom = {};
+    thisCart.dom = {
+    /*Basket wrapper passed from constructor*/
+    wrapper: element,
+    /*basket trigger element */
+    toggleTrigger: element.querySelector(select.cart.toggleTrigger),
+    };
+  }
 
-    thisCart.dom.wrapper = element;
+  initActions() {
+    const thisCart = this;
 
+    thisCart.dom.toggleTrigger.addEventListener('click', function() {
+      thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive)
+    })
   }
 }
 
@@ -360,10 +369,18 @@ class Cart {
       const thisApp = this; 
       thisApp.initData(); // 1st 
       thisApp.initMenu(); // 2nd 
+    },
+
+    initCart() {
+      const thisApp = this; 
+
+      /*Createting a new class */           /*Basket wrapper */
+      thisApp.cart = new Cart(document.querySelector(select.containerOf.cart));
     }
    }
 
    app.init();
+   app.initCart();
   }
 
 
