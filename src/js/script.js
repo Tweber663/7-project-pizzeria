@@ -426,7 +426,11 @@ class Cart {
     /*delivery fee */ 
     deliveryFee: settings.cart.defaultDeliveryFee,
     /*Subtotal price (without delivery) */
-
+    subtotalPrice: thisCart.totalPrice, 
+    /*total price (+delivery) */ 
+    totalPrice: thisCart.totalPrice + settings.cart.defaultDeliveryFee,
+    /*total number of times inside basket / cart */
+    totalNumber: thisCart.products.length,
 
 
     };
@@ -491,6 +495,8 @@ class Cart {
     console.log("totalNumber:", totalNumber)
     console.log("subtotalPrice:", subtotalPrice)
     console.log("thisCart.totalPrice:", thisCart.totalPrice);
+    
+    thisCart.dom.wrapper.querySelector(select.cart.totalPrice).innerHTML = thisCart.totalPrice;
   }
 }
 
