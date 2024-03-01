@@ -104,6 +104,8 @@
 
         /*generating HTML based on template using handlebars*/
         const generateHTML = templates.menuProduct(thisProduct.data);
+        console.log('thisProduct.data', thisProduct.data);
+        console.log('generateHTML', generateHTML);
         
         /* create element using utils.createElementFromHtml 'functions.js'*/
         thisProduct.element = utils.createDOMFromHTML(generateHTML);
@@ -186,7 +188,6 @@
         event.preventDefault();
 
         thisProduct.addToCart(); /*triggering a function */
-        thisProduct.prepareCartProductParams()
         thisProduct.processOrder();
       })
       }
@@ -202,12 +203,13 @@
           amount: thisProduct.amountWidget.value,
           priceSingle: thisProduct.priceSingle, 
           price: thisProduct.priceSingle * thisProduct.amountWidget.value,
-          params: '',
+          //Callback, passing an object containing selected extras
+          params: thisProduct.prepareCartProductParams(), 
         };
         return productSummary;
       }
 
-      /*2.Preparing cart elem befor they are added*/
+      /*2.Preparing selected items before adding to cart*/
       prepareCartProductParams() {
         const thisProduct = this;
         console.log('id', thisProduct.data);
@@ -234,34 +236,35 @@
           console.log('Extras Items 🔻', extrasItems);
 
           if (formData[paramId].includes(toppingId)) {
-            console.log(paramId);
+            console.log(toppingId);
 
-           selectedExtras += {
-            jake: extrasItems.label
-           }
-            
-            // selectedExtras = {
-            //   [paramId]: {
-            //     label: extrasObject.label,
-            //     options: {
-            //       [toppingId]: extrasItems.label,
-            //     }
-            //   }
-            // }
-          } else {
-            console.log(false);
+            /*If stamtnet checking is Extras alredy exsist in the designated object */
+            /*If they exsist - the won't get added*/
+            /*If Don't - will get added */
+            if (!selectedExtras[paramId]) {
+              //[patamId] category extra name 'ingriditens)
+              selectedExtras[paramId] = {
+                  label: extrasObject.label,
+                  options: {}
+              };
           }
+          // Category Extra             //Feta          //Feta-cheese
+          selectedExtras[paramId].options[toppingId] = extrasItems.label;
+
+            /*OPtional way of writing the code above!!!*/
+            // selectedExtras[paramId].options = {
+            //   ...selectedExtras[paramId].options,
+            //   [toppingId]: extrasItems.label
+            // };
           }
         }
-        console.log(selectedExtras);
-        // const selected = {
-        //   ingredients: thisProduct.data.params.ingredients.label,
-        // }
-
-
       }
+      console.log(selectedExtras);
+      /*returning created object. It will be used inside prepareCartProduct()*/
+      return selectedExtras;
+    }
       
-      /*2.Adding elements to our'cart' CLASS*/
+      /*3.Adding elements to our'cart' CLASS*/
       addToCart() {
         const thisProduct = this; 
         /*We're triggering our Cart class + passing a refrence / instant*/
@@ -422,6 +425,10 @@ class Cart {
     wrapper: element,
     /*basket trigger element */
     toggleTrigger: element.querySelector(select.cart.toggleTrigger),
+    /*basket summary wrapper*/
+    productList: element.querySelector(select.cart.productList),
+
+
     };
   }
 
@@ -429,7 +436,7 @@ class Cart {
     const thisCart = this;
 
     /*Toggling basket visiblity */
-    thisCart.dom.toggleTrigger.addEventListener('click', function() {
+      thisCart.dom.toggleTrigger.addEventListener('click', function() {
       thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive)
     })
   }
@@ -439,8 +446,16 @@ class Cart {
    us acess to product instand after add to cart is pressed*/
    
    const thisCart = this;
-    
-    console.log('adding product:', menuProduct);
+
+   /*generated HTML based on the passed object using 'cardProduct' beloning to handlebard*/
+   const generatedHTML = templates.cartProduct(menuProduct);
+
+   /*converting above HTML to DOM element */
+   const generatedDOM = utils.createDOMFromHTML(generatedHTML);
+
+   /*Adding the DOM object to our HTML website */
+   thisCart.dom.productList.appendChild(generatedDOM);
+
   }
 }
 
