@@ -400,14 +400,16 @@ class AmountWidget {
 class Cart {
   constructor(element) {
     const thisCart = this;
+    console.log('hello')
 
-    /* Storing basket items */
+    /* basket items summary*/
     thisCart.products = [];
 
     /*init dom elements */
     thisCart.getElements(element);
 
     thisCart.initActions();
+    thisCart.update()
   }
 
   getElements(element) {
@@ -421,6 +423,10 @@ class Cart {
     toggleTrigger: element.querySelector(select.cart.toggleTrigger),
     /*basket summary wrapper*/
     productList: element.querySelector(select.cart.productList),
+    /*delivery fee */ 
+    deliveryFee: settings.cart.defaultDeliveryFee,
+    /*Subtotal price (without delivery) */
+
 
 
     };
@@ -438,7 +444,6 @@ class Cart {
   add(menuProduct) {
   /* 'menuProduct' argument comes from 'addToCart()'and is giving
    us acess to product instant after add to cart is pressed*/
-   
    const thisCart = this;
 
    /*generated HTML based on the passed object using 'cardProduct' beloning to handlebard*/
@@ -453,6 +458,39 @@ class Cart {
    /*pushing the created order object to Array */
    /* + We're creating a new class instant and saving all the code it generated inside the array at the same time */
    thisCart.products.push(new CartProduct (menuProduct, generatedDOM));
+
+   /*initilsing func*/
+   thisCart.update()
+  }
+
+  /*responsbile for adding up the total cost of all the items in the cart / basket */
+  update() {
+    const thisCart = this; 
+
+    const deliveryFee = settings.cart.defaultDeliveryFee;
+
+    /*Number of order inside the basket*/
+    let totalNumber = 0;
+
+    /*total cost amount 'excluding' delivery*/
+    let subtotalPrice = 0;
+
+    console.log(thisCart.products)
+    /* Cycling throguh each poduct inside of 'basket items summary'obj */
+    for (let product of thisCart.products) {
+      /*counter of itmes inside the basket*/
+      totalNumber++;
+      /*Counting each item cost */
+      subtotalPrice += product.price;
+    }
+
+    /*Sumary of total coast of all the itmes + delviery cost */
+    /*checking if basket has items, because it it doesn't there is no point adding delivery free*/
+    totalNumber === 0? thisCart.totalPrice = 0 : thisCart.totalPrice = subtotalPrice + deliveryFee;
+
+    console.log("totalNumber:", totalNumber)
+    console.log("subtotalPrice:", subtotalPrice)
+    console.log("thisCart.totalPrice:", thisCart.totalPrice);
   }
 }
 
@@ -509,10 +547,6 @@ class CartProduct {
   }
   
 }
-
-
-
-
 
 
   const app = {
