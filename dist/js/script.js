@@ -104,8 +104,6 @@
 
         /*generating HTML based on template using handlebars*/
         const generateHTML = templates.menuProduct(thisProduct.data);
-        console.log('thisProduct.data', thisProduct.data);
-        console.log('generateHTML', generateHTML);
         
         /* create element using utils.createElementFromHtml 'functions.js'*/
         thisProduct.element = utils.createDOMFromHTML(generateHTML);
@@ -145,7 +143,7 @@
         /*Creating a new class instand & passing widget wrapper element*/ 
         thisProduct.amountWidget = new AmountWidget(thisProduct.dom.amountWidgetElem);
         thisProduct.dom.amountWidgetElem.addEventListener('updated', function() {
-          thisProduct.processOrder();
+        thisProduct.processOrder();
         });
       
       }
@@ -202,7 +200,7 @@
           name: thisProduct.data.name,
           amount: thisProduct.amountWidget.value,
           priceSingle: thisProduct.priceSingle, 
-          price: thisProduct.priceSingle * thisProduct.amountWidget.value,
+          price: thisProduct.totalOrderPrice * thisProduct.amountWidget.value,
           //Callback, passing an object containing selected extras
           params: thisProduct.prepareCartProductParams(), 
         };
@@ -212,11 +210,10 @@
       /*2.Preparing selected items before adding to cart*/
       prepareCartProductParams() {
         const thisProduct = this;
-        console.log('id', thisProduct.data);
         /*this thing is hooked up to a form, an
         d tranfroms selected items into an object*/
         const formData = utils.serializeFormToObject(thisProduct.dom.form);
-        console.log('selected extras 📋', formData);
+        // console.log('selected extras 📋', formData);
 
         let selectedExtras = {
 
@@ -228,15 +225,14 @@
         for (let paramId in thisProduct.data.params) {
         /*using the object name, on the object, to acess it and all it's info */
           const extrasObject = thisProduct.data.params[paramId];
-          console.log('Extras Category 🔴', extrasObject);
+          // console.log('Extras Category 🔴', extrasObject);
           
           /*Cycling throught individual toppings following the logic above */
           for (let toppingId in extrasObject.options) {
           const extrasItems = extrasObject.options[toppingId];
-          console.log('Extras Items 🔻', extrasItems);
+          // console.log('Extras Items 🔻', extrasItems);
 
           if (formData[paramId].includes(toppingId)) {
-            console.log(toppingId);
 
             /*If stamtnet checking is Extras alredy exsist in the designated object */
             /*If they exsist - the won't get added*/
@@ -259,7 +255,6 @@
           }
         }
       }
-      console.log(selectedExtras);
       /*returning created object. It will be used inside prepareCartProduct()*/
       return selectedExtras;
     }
@@ -321,18 +316,19 @@
 
             }
       }
+      /*Single item total price inclduing selected option / extras*/
+      thisProduct.priceSingle = price;
 
       /* Responbile multiplaying the price bsed on quantity amount (widget) */
       price*= thisProduct.amountWidget.value;
-      
-      /*STATIC - product base price (without any extras)*/
-      thisProduct.priceSingle = thisProduct.data.price;
 
       //update calculate price in the HTML 
       thisProduct.dom.priceElem.innerHTML = price;
-      }
 
+      thisProduct.totalOrderPrice = price;
+      }
 }
+
 
 class AmountWidget {
   constructor(element) {
@@ -360,14 +356,12 @@ class AmountWidget {
 
   setValue(value) {
     const thisWidget = this;
-    console.log(value);
     const newValue = parseInt(value);
     if (thisWidget.value !== newValue && !isNaN(newValue) && newValue >= settings.amountWidget.defaultMin && newValue <= settings.amountWidget.defaultMax) {
     thisWidget.value = newValue;
     thisWidget.announce();
     }
     thisWidget.input.value = thisWidget.value;
-    console.log(thisWidget.input.value)
     }
 
 
@@ -396,11 +390,12 @@ class AmountWidget {
   /*our custom event listener */
   announce() {
     const thisWidget = this; 
-
+    
     const event = new Event('updated');
     thisWidget.element.dispatchEvent(event);
   }
 } 
+
 
 class Cart {
   constructor(element) {
@@ -413,7 +408,6 @@ class Cart {
     thisCart.getElements(element);
 
     thisCart.initActions();
-    console.log('new card:', thisCart);
   }
 
   getElements(element) {
@@ -443,7 +437,7 @@ class Cart {
 
   add(menuProduct) {
   /* 'menuProduct' argument comes from 'addToCart()'and is giving
-   us acess to product instand after add to cart is pressed*/
+   us acess to product instant after add to cart is pressed*/
    
    const thisCart = this;
 
@@ -456,8 +450,70 @@ class Cart {
    /*Adding the DOM object to our HTML website */
    thisCart.dom.productList.appendChild(generatedDOM);
 
+   /*pushing the created order object to Array */
+   /* + We're creating a new class instant and saving all the code it generated inside the array at the same time */
+   thisCart.products.push(new CartProduct (menuProduct, generatedDOM));
   }
 }
+
+
+/*this class will be responsbile for individual items in our basket */
+class CartProduct {
+  /* As argument we recive the created object from cart class + DOM element */
+  constructor(menuProduct, element) {
+    const thisCartProduct = this;
+
+    thisCartProduct.menuProduct = menuProduct;
+    thisCartProduct.amount = menuProduct.amount;
+    thisCartProduct.id = menuProduct.id;
+    thisCartProduct.name = menuProduct.name; 
+    thisCartProduct.params = menuProduct.params;
+    thisCartProduct.price = menuProduct.price;
+    thisCartProduct.priceSingle = menuProduct.priceSingle;
+    
+
+    thisCartProduct.getElements();
+    thisCartProduct.initAmountWidget()
+  }
+
+  /*Argu - refrence to DOM element */
+  getElements(element) {
+    const thisCartProduct = this;
+    
+    thisCartProduct.dom = {
+      wrapper: element,  /* DOM ele */
+      amountWidget: document.querySelector(select.cartProduct.amountWidget), 
+      price: document.querySelector(select.cartProduct.price),
+      edit: document.querySelector(select.cartProduct.edit),
+      remove: document.querySelector(select.cartProduct.remove),
+    }  
+  }
+
+  initAmountWidget() {
+    const thisCartProduct = this; 
+    /*Creating a new class instant responsbile for changing product quantity, and acessing the changed quantity amount*/ 
+    thisCartProduct.amountWidget = new AmountWidget(thisCartProduct.dom.amountWidget);
+
+    /*Listening to changes inside the cart / basket widget */
+    thisCartProduct.dom.amountWidget.addEventListener('updated', function() {
+
+    /*updated quantity amount 'value' from class instant used to change value inside current class*/
+    thisCartProduct.amount = thisCartProduct.amountWidget.value;
+
+    /*using the updated quanity and dividing it by 'priceSingle' that comes from process order Product class */
+    thisCartProduct.price = thisCartProduct.priceSingle * thisCartProduct.amount;
+
+    /*inside out basket we're updating the total price of individual item */
+    thisCartProduct.dom.price.innerHTML = thisCartProduct.price;
+    });
+  }
+  
+}
+
+
+
+
+
 
   const app = {
     initMenu() {  // <-- Cycling through each 'product' inside 'dataSource'  
@@ -485,6 +541,8 @@ class Cart {
       /*Createting a new class */           /*Basket wrapper */
       thisApp.cart = new Cart(document.querySelector(select.containerOf.cart));
     }
+
+    
    }
 
    app.init();
