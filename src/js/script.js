@@ -460,12 +460,21 @@ class Cart {
       });
   }
   
-  //Reciving the info about the object from cusotm event 
+  //4.Reciving the info about the object from cusotm event 
   remove(cartProduct) {
     const thisCart = this; 
-    console.log(cartProduct);
 
+    /*Deleting item from HTML */
+    cartProduct.dom.wrapper.remove();
+    
+    /*Deleting item from storge Obj */
+    thisCart.products.splice(thisCart.products.indexOf(cartProduct), 1);
+
+    /* envoking update function to update the price */
+    thisCart.update();
+    
   }
+
 
   add(menuProduct) {
   /* 'menuProduct' argument comes from 'addToCart()'and is giving
@@ -480,7 +489,6 @@ class Cart {
 
    /*[DOM] -> adding item to our HTML website */
    thisCart.dom.productList.appendChild(generatedDOM);
-   console.log(thisCart.dom.productList);
 
    /*pushing the created order object to Array */
    /* + We're creating a new class instant and saving all the code it generated inside the array at the same time */
@@ -494,7 +502,7 @@ class Cart {
   update() {
     const thisCart = this; 
 
-    const deliveryFee = settings.cart.defaultDeliveryFee;
+    let deliveryFee = settings.cart.defaultDeliveryFee;
 
     /*Number of order inside the basket*/
     let totalNumber = 0;
@@ -502,17 +510,24 @@ class Cart {
     /*total cost amount 'excluding' delivery*/
     let subtotalPrice = 0;
 
+    console.log('productss:', thisCart.products)
     /* Cycling throguh each poduct inside of 'basket items summary'obj */
     for (let product of thisCart.products) {
       /*counter of itmes inside the basket*/
       totalNumber++;
       /*Counting each item cost */
       subtotalPrice += product.price;
+      console.log('product:', product)
     }
 
     /*Sumary of total coast of all the itmes + delviery cost */
     /*checking if basket has items, because it it doesn't there is no point adding delivery free*/
-    totalNumber === 0? thisCart.totalPrice = 0 : thisCart.totalPrice = subtotalPrice + deliveryFee;
+    if (totalNumber === 0) {
+      thisCart.totalPrice = 0;
+      deliveryFee = 0;
+    } else {
+      thisCart.totalPrice = subtotalPrice + deliveryFee;
+    }
 
     /*[DOM] -> Adding total price to TOP section */
     thisCart.dom.totalPriceUp.innerHTML = thisCart.totalPrice;
@@ -606,6 +621,8 @@ class CartProduct {
       event.preventDefault();
     /*trigger remove func*/
     thisCartProduct.remove();
+
+  
     });
   }
 
@@ -646,3 +663,5 @@ class CartProduct {
    app.init();
    app.initCart();
   }
+
+  
