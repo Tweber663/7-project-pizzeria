@@ -605,6 +605,7 @@ class CartProduct {
         cartProduct: thisCartProduct, /* -> We're passing the class instance 🟣*/
       },
     });
+    //Where the event will be executed
     thisCartProduct.dom.wrapper.dispatchEvent(event);
   }
 
