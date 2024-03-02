@@ -37,7 +37,8 @@
       productList: '.cart__order-summary',
       toggleTrigger: '.cart__summary',
       totalNumber: `.cart__total-number`,
-      totalPrice: '.cart__total-price strong, .cart__order-total .cart__order-price-sum strong',
+      totalPriceUp: '.cart__total-price strong',
+      totalPriceDown: '.cart__order-total .cart__order-price-sum strong',
       subtotalPrice: '.cart__order-subtotal .cart__order-price-sum strong',
       deliveryFee: '.cart__order-delivery .cart__order-price-sum strong',
       form: '.cart__order',
@@ -385,13 +386,14 @@ class AmountWidget {
       thisWidget.setValue(thisWidget.value + 1);
     })
   }
-  
 
   /*our custom event listener */
   announce() {
     const thisWidget = this; 
     
-    const event = new Event('updated');
+    const event = new CustomEvent('updated', {
+      bubbles: true
+    });
     thisWidget.element.dispatchEvent(event);
   }
 } 
@@ -424,11 +426,13 @@ class Cart {
     /*basket summary wrapper*/
     productList: element.querySelector(select.cart.productList),
     /*delivery fee */ 
-    deliveryFee: settings.cart.defaultDeliveryFee,
+    deliveryFee: element.querySelector(select.cart.deliveryFee),
     /*Subtotal price (without delivery) */
-    subtotalPrice: thisCart.totalPrice, 
-    /*total price (+delivery) */ 
-    totalPrice: thisCart.totalPrice + settings.cart.defaultDeliveryFee,
+    subtotalPrice: element.querySelector(select.cart.subtotalPrice),
+    /*total price (+delivery) upper section*/ 
+    totalPriceUp: element.querySelector(select.cart.totalPriceUp),
+    /*total price (+delivery) lower section*/ 
+    totalPriceDown: element.querySelector(select.cart.totalPriceDown),
     /*total number of times inside basket / cart */
     totalNumber: thisCart.products.length,
 
@@ -442,7 +446,25 @@ class Cart {
     /*Toggling basket visiblity */
       thisCart.dom.toggleTrigger.addEventListener('click', function() {
       thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive)
-    })
+    });
+
+    /*Listen to changes inisde UL tag where individual products are added*/
+      thisCart.dom.productList.addEventListener('updated', function() {
+        thisCart.update();
+      });
+    
+     /*3.Listen to changes inisde UL tag where individual products are added*/
+     /* We're also reciving back info from custom event <- 🟣 */
+      thisCart.dom.productList.addEventListener('remove', function() {
+        thisCart.remove(event.detail.cartProduct) //Passing the recived info as argument
+      });
+  }
+  
+  //Reciving the info about the object from cusotm event 
+  remove(cartProduct) {
+    const thisCart = this; 
+    console.log(cartProduct);
+
   }
 
   add(menuProduct) {
@@ -456,8 +478,9 @@ class Cart {
    /*converting above HTML to DOM element */
    const generatedDOM = utils.createDOMFromHTML(generatedHTML);
 
-   /*Adding the DOM object to our HTML website */
+   /*[DOM] -> adding item to our HTML website */
    thisCart.dom.productList.appendChild(generatedDOM);
+   console.log(thisCart.dom.productList);
 
    /*pushing the created order object to Array */
    /* + We're creating a new class instant and saving all the code it generated inside the array at the same time */
@@ -479,7 +502,6 @@ class Cart {
     /*total cost amount 'excluding' delivery*/
     let subtotalPrice = 0;
 
-    console.log(thisCart.products)
     /* Cycling throguh each poduct inside of 'basket items summary'obj */
     for (let product of thisCart.products) {
       /*counter of itmes inside the basket*/
@@ -492,11 +514,14 @@ class Cart {
     /*checking if basket has items, because it it doesn't there is no point adding delivery free*/
     totalNumber === 0? thisCart.totalPrice = 0 : thisCart.totalPrice = subtotalPrice + deliveryFee;
 
-    console.log("totalNumber:", totalNumber)
-    console.log("subtotalPrice:", subtotalPrice)
-    console.log("thisCart.totalPrice:", thisCart.totalPrice);
-    
-    thisCart.dom.wrapper.querySelector(select.cart.totalPrice).innerHTML = thisCart.totalPrice;
+    /*[DOM] -> Adding total price to TOP section */
+    thisCart.dom.totalPriceUp.innerHTML = thisCart.totalPrice;
+    /*[DOM] -> Adding total price to BOTTOM section */
+    thisCart.dom.totalPriceDown.innerHTML = thisCart.totalPrice; 
+    /*[DOM] -> Adding subtotal (without delivery) */
+    thisCart.dom.subtotalPrice.innerHTML = subtotalPrice;
+    /*[DOM] -> Adding delivery fee */
+    thisCart.dom.deliveryFee.innerHTML = deliveryFee;
   }
 }
 
@@ -516,8 +541,9 @@ class CartProduct {
     thisCartProduct.priceSingle = menuProduct.priceSingle;
     
 
-    thisCartProduct.getElements();
-    thisCartProduct.initAmountWidget()
+    thisCartProduct.getElements(element);
+    thisCartProduct.initAmountWidget();
+    thisCartProduct.initActions();
   }
 
   /*Argu - refrence to DOM element */
@@ -526,10 +552,12 @@ class CartProduct {
     
     thisCartProduct.dom = {
       wrapper: element,  /* DOM ele */
-      amountWidget: document.querySelector(select.cartProduct.amountWidget), 
-      price: document.querySelector(select.cartProduct.price),
-      edit: document.querySelector(select.cartProduct.edit),
-      remove: document.querySelector(select.cartProduct.remove),
+      amountWidget: element.querySelector(select.cartProduct.amountWidget), 
+      price: element.querySelector(select.cartProduct.price),
+      /*DOM button location <- */
+      edit: element.querySelector(select.cartProduct.edit),
+      /*DOM remove icon location <- */
+      remove: element.querySelector(select.cartProduct.remove),
     }  
   }
 
@@ -552,7 +580,37 @@ class CartProduct {
     });
   }
   
+  /*2.Respinsbile for deleting individual items in our basket using custom event and bubbling */
+  remove() {
+    const thisCartProduct = this;
+    const event = new CustomEvent('remove', {
+      bubbles: true, 
+      /*detials allows us to pass whatever info we wont to event handler */
+      detail: {
+        cartProduct: thisCartProduct, /* -> We're passing the class instance 🟣*/
+      },
+    });
+    thisCartProduct.dom.wrapper.dispatchEvent(event);
+  }
+
+ initActions() { //1. Evenet listeners that will trigger the remove method
+    const thisCartProduct = this; 
+
+    thisCartProduct.dom.edit.addEventListener('click', function(event) {
+      event.preventDefault();
+      /*trigger remove func*/
+      thisCartProduct.remove();
+    });
+
+    thisCartProduct.dom.remove.addEventListener('click', function(event) {
+      event.preventDefault();
+    /*trigger remove func*/
+    thisCartProduct.remove();
+    });
+  }
+
 }
+
 
 
   const app = {
@@ -588,5 +646,3 @@ class CartProduct {
    app.init();
    app.initCart();
   }
-
-
