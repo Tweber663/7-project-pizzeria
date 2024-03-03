@@ -78,6 +78,11 @@
       defaultDeliveryFee: 20,
     },
     // CODE ADDED END
+    db: {
+      url: '//localhost:3131',
+      products: 'products',
+      orders: 'orders',
+    },
   };
   
   const templates = {
@@ -402,7 +407,6 @@ class AmountWidget {
 class Cart {
   constructor(element) {
     const thisCart = this;
-    console.log('hello')
 
     /* basket items summary*/
     thisCart.products = [];
@@ -435,7 +439,8 @@ class Cart {
     totalPriceDown: element.querySelector(select.cart.totalPriceDown),
     /*total number of times inside basket / cart */
     totalNumber: thisCart.products.length,
-
+    /*Cart form */
+    form: element.querySelector(select.cart.form),
 
     };
   }
@@ -458,7 +463,58 @@ class Cart {
       thisCart.dom.productList.addEventListener('remove', function() {
         thisCart.remove(event.detail.cartProduct) //Passing the recived info as argument
       });
+      
+      /*form, event listener */
+      thisCart.dom.form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        /*Trigger a func respo for put togather the order and send it to the server */
+        const phoneNumberForm = event.target.phone.value;
+        const adressFrom = event.target.address.value;
+        thisCart.sendOrder(phoneNumberForm, adressFrom);
+
+      })
   }
+
+     /*respo for put togather the order and send it to the server */
+  sendOrder(phoneNumberForm, adressFrom) {
+    const thisCart = this; 
+
+    /* 1st preparing the address of the endpoint we want to connect to */
+    const url = `${settings.db.url}/${settings.db.orders}`;
+
+    /*prepering the payload for json-server */
+    const payload = {
+      address: adressFrom, 
+      phone: phoneNumberForm, 
+      totalPrice: thisCart.dom.totalPriceDown.textContent,
+      subtotalPrice: thisCart.dom.subtotalPrice.textContent, 
+      totalNumber: thisCart.products.length.toString(),
+      deliveryFee: thisCart.dom.deliveryFee.textContent,
+      products: [],
+    }
+    console.log(thisCart.dom.deliveryFee);
+
+    //Cycling throguth getData() of CartProduct class which returns an object{
+    for(let prod of thisCart.products) {
+    //We inser this object inside our payload obj
+      payload.products.push(prod.getData());
+    }
+
+    //Prepering fetch settings
+    const options = {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json',}, 
+      body: JSON.stringify(payload),
+    };
+    /*Launching our payload into SPACE!*/
+    fetch(url, options).then((response) => {
+      return response.json();
+    }).then((convertedResponse) => console.log(convertedResponse), {
+    }).catch((err) => console.log(err));
+  }
+
+
+  
   
   //4.Reciving the info about the object from cusotm event 
   remove(cartProduct) {
@@ -510,7 +566,6 @@ class Cart {
     /*total cost amount 'excluding' delivery*/
     let subtotalPrice = 0;
 
-    console.log('productss:', thisCart.products)
     /* Cycling throguh each poduct inside of 'basket items summary'obj */
     for (let product of thisCart.products) {
       /*counter of itmes inside the basket*/
@@ -622,9 +677,23 @@ class CartProduct {
       event.preventDefault();
     /*trigger remove func*/
     thisCartProduct.remove();
-
-  
     });
+    thisCartProduct.getData()
+  }
+
+  getData() {
+    const thisCartProduct = this; 
+
+    const gettingData = {
+      id: thisCartProduct.id, 
+      amount: thisCartProduct.amount, 
+      price: thisCartProduct.price, 
+      priceSingle: thisCartProduct.priceSingle, 
+      name: thisCartProduct.name, 
+      params: thisCartProduct.params, 
+    };
+
+    return gettingData;
   }
 
 }
@@ -636,19 +705,38 @@ class CartProduct {
       const thisApp = this;
       for(let productData in thisApp.data.products) {  
         // Createting a new object based on the cycled info, 1st 'product value, 2nd, passed the 'product' object property
-       new Product(productData, thisApp.data.products[productData])
+        new Product(thisApp.data.products[productData].id, thisApp.data.products[productData]);
       }
     }, 
 
     initData() {  // ---> 💾 connecting to data.js * grabbing 'dataSource' object
       const thisApp = this;
-      thisApp.data = dataSource; 
+      /*placing fetched data inside this object */
+      thisApp.data = {}; 
+      /* link to our json-server 'http://localhost:3131/products'*/
+      const url = `${settings.db.url}/${settings.db.products}`;
+      console.log(url);
+
+      /* Fetching info from our json-server which is connected to src/db/app */
+      fetch(url).then((rawResponse) => {
+        console.log(rawResponse)
+        return rawResponse.json();     /*grabbing the data in json format */
+      }).then((parsedResponse) => {    /* Auto changes to array format */ 
+        console.log('parasedResponse', parsedResponse); /*Accsing the list of products in usable data type */
+
+      /* save parsedResponse as thisApp.data.products */
+      thisApp.data.products = parsedResponse;
+
+      /*execute initMenu method */
+      thisApp.initMenu();
+
+      });
+      console.log('thisApp.data', JSON.stringify(thisApp.data));
     },
 
     init() {
       const thisApp = this; 
       thisApp.initData(); // 1st 
-      thisApp.initMenu(); // 2nd 
     },
 
     initCart() {
