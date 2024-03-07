@@ -1,6 +1,6 @@
-import { select, templates } from "./settings";
-import utils from "../utils";
-import AmountWidget from "./AmountWidget";
+import { select, templates } from "../settings.js";
+import utils from "../utils.js";
+import AmountWidget from "./AmountWidget.js";
 
 class Product {
     constructor(id, data) {
@@ -176,16 +176,18 @@ class Product {
       
       /*3.Adding elements to our'cart' CLASS*/
       addToCart() {
-        const thisProduct = this; 
-        
+        const thisProduct = this;
+     
+        //  app.cart.add(thisProduct.prepareCartProduct());
         const event = new CustomEvent('add-to-cart', {
-          bubbles: true, 
+          bubbles: true,
           detail: {
-            product: thisProduct,
-          }
-        });
+            product: thisProduct.prepareCartProduct(),
+          },
+        }
+        );
         thisProduct.element.dispatchEvent(event);
-      }
+     }
 
       processOrder() {
         const thisProduct = this;

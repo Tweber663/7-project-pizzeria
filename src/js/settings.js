@@ -87,4 +87,4 @@ const templates = {
     // CODE ADDED END
   };
 
-export {select, classNames, settings, templates}
+export {templates, settings, classNames, select} 

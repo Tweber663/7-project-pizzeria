@@ -1,5 +1,5 @@
-import { select } from "../settings";
-import AmountWidget from "./AmountWidget";
+import { select } from "../settings.js";
+import AmountWidget from "./AmountWidget.js";
 /*this class will be responsbile for individual items in our basket */
 class CartProduct {
     /* As argument we recive the created object from cart class + DOM element */
