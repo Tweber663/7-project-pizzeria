@@ -188,6 +188,7 @@ class Product {
         );
         thisProduct.element.dispatchEvent(event);
      }
+
       processOrder() {
         const thisProduct = this;
         //Converting FORM to object strocture e.g {sauce: 'tomato etc]}
