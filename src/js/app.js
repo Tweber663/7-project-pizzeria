@@ -1,8 +1,75 @@
-import { settings, select } from "./settings.js";
+import { settings, select, classNames } from "./settings.js";
 import Product from "./components/Product.js";
 import Cart from "./components/Cart.js";
 
-const app = {
+const app = { 
+  //Responsbile for navigating between pages
+  initPages() {
+    const thisApp = this;
+
+    //this.pages saves info from query inside the 'app' obj under 'pages' name
+    // We query pages wrappers where handlebars script will be placed
+    thisApp.pages = document.querySelector(select.containerOf.pages).children;
+
+        
+    //Grabbing links responsible for changing between websites
+    thisApp.navLinks = document.querySelectorAll(select.nav.links);
+
+    //Grabbing the hash of the current page
+    const idFromHash = window.location.hash.replace('#/', '');
+
+    let pageMatchingHash = thisApp.pages[0].id;
+
+    //if someone types in incorrect link retunrs to page 1
+    for (let page of thisApp.pages) {
+      if (page.id === idFromHash) {
+        pageMatchingHash = page.id;
+        break; 
+      } 
+    }
+
+    //passing current page hash into the fucntion
+    thisApp.activatePage(pageMatchingHash);
+ 
+    //event listener to link buttons
+    for (let link of thisApp.navLinks) {
+      link.addEventListener('click', function(event) {
+        event.preventDefault();
+        //Saving clicked element info inside the 'clcikedElement' const
+        const clickedElement = this;
+
+        //get page href id from the link and remove #
+        const id = clickedElement.getAttribute('href').replace('#', '');
+
+        //trigger activatePage func with the href ID  
+        thisApp.activatePage(id);
+
+        //We're adding the page id to the page url. the '/' prevents for refreshing the page. 
+        window.location.hash = '#/' + id; 
+      })
+    }
+
+  },
+
+  activatePage(pageId) { 
+    const thisApp = this;
+
+    //add class 'active' to selected PAGE, and remove 'active class from not selected PAGE 
+    for (let page of thisApp.pages) {
+      //Toggle class 'active' depddning on page id
+      //Here we're also using a toggle function, with if stamtnet as second argument:) 
+      page.classList.toggle(classNames.pages.active, page.id == pageId);
+    }
+
+
+    //add class 'active' to selected LINK, and remove 'active' class from not selected LINK
+    for(let link of thisApp.navLinks) {
+     //checking if link href is equal to page id
+      link.classList.toggle(classNames.nav.active, link.getAttribute('href') == '#' + pageId)
+    }
+  },
+
+
   initMenu() {  // <-- Cycling through each 'product' inside 'dataSource'  
     const thisApp = this;
     for(let productData in thisApp.data.products) {  
@@ -37,11 +104,6 @@ const app = {
 
   },
 
-  init() {
-    const thisApp = this; 
-    thisApp.initData(); // 1st 
-  },
-
   initCart() {
     const thisApp = this; 
 
@@ -54,9 +116,18 @@ const app = {
       app.cart.add(event.detail.product);
       console.log(app);
     })
-  }
+  },
+
+  init() { //Responsbile for triggering all the functions. 
+    const thisApp = this; 
+    thisApp.initData(); // 1st
+
+    thisApp.initPages();
+
+    thisApp.initCart();
+
+  },
 }
 
 app.init();
-app.initCart();
 
