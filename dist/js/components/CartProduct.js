@@ -42,7 +42,8 @@ class CartProduct {
       thisCartProduct.amountWidget = new AmountWidget(thisCartProduct.dom.amountWidget);
     
       /*Listening to changes inside the cart / basket widget */
-      thisCartProduct.dom.amountWidget.addEventListener('updated', function() {
+      thisCartProduct.dom.amountWidget.addEventListener('updated', function(event) {
+        console.log(event);
     
         /*updated quantity amount 'value' from class instant used to change value inside current class*/
         thisCartProduct.amount = thisCartProduct.amountWidget.value;

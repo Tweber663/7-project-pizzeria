@@ -1,9 +1,10 @@
 import { settings, select, classNames } from "./settings.js";
 import Product from "./components/Product.js";
 import Cart from "./components/Cart.js";
+import Booking from "./components/Booking.js";
 
 const app = { 
-  //Responsbile for navigating between pages
+ //Respo for navigating between pages
   initPages() {
     const thisApp = this;
 
@@ -18,9 +19,12 @@ const app = {
     //Grabbing the hash of the current page
     const idFromHash = window.location.hash.replace('#/', '');
 
+    
+    //**[Respo for displaying our website and checking for errors
     let pageMatchingHash = thisApp.pages[0].id;
 
-    //if someone types in incorrect link retunrs to page 1
+  
+    //if current open page (url hash) equals any of the pages 'id' the matching page will load 
     for (let page of thisApp.pages) {
       if (page.id === idFromHash) {
         pageMatchingHash = page.id;
@@ -28,8 +32,11 @@ const app = {
       } 
     }
 
+    //If match won't take place, we go back to the first page in pageatchingHash
+
     //passing current page hash into the fucntion
     thisApp.activatePage(pageMatchingHash);
+    //*/]
  
     //event listener to link buttons
     for (let link of thisApp.navLinks) {
@@ -50,7 +57,7 @@ const app = {
     }
 
   },
-
+ //Respo for navigating between pages
   activatePage(pageId) { 
     const thisApp = this;
 
@@ -69,9 +76,16 @@ const app = {
     }
   },
 
+  //Respo bookings
+  initBooking() {
+    const thisApp = this;
+    //Creating 'Booking' class instant & passing the booking-wrapper
+    new Booking(document.querySelector(select.containerOf.booking));
+  },
 
   initMenu() {  // <-- Cycling through each 'product' inside 'dataSource'  
     const thisApp = this;
+    console.log(thisApp)
     for(let productData in thisApp.data.products) {  
       // Createting a new object based on the cycled info, 1st 'product value, 2nd, passed the 'product' object property
       new Product(thisApp.data.products[productData].id, thisApp.data.products[productData]);
@@ -125,6 +139,8 @@ const app = {
     thisApp.initPages();
 
     thisApp.initCart();
+
+    thisApp.initBooking();
 
   },
 }
