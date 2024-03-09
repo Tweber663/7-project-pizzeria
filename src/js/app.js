@@ -76,9 +76,8 @@ const app = {
     }
   },
 
-  //Respo bookings
+  //Respo for bookings
   initBooking() {
-    const thisApp = this;
     //Creating 'Booking' class instant & passing the booking-wrapper
     new Booking(document.querySelector(select.containerOf.booking));
   },
