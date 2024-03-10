@@ -5,7 +5,6 @@ import AmountWidget from "./AmountWidget.js";
 class Booking {
     constructor(element){
      const thisBooking = this;
-     console.log(element.classList)
      thisBooking.render(element);
      thisBooking.initWidgets();
     }
@@ -45,7 +44,7 @@ class Booking {
             event.preventDefault();
 
         })
-
+        //* this ⬇
          //Attaching event listener to people counter widget
         thisBooking.dom.hoursAmount.addEventListener('change', function(event) {
             event.preventDefault();

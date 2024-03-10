@@ -175,6 +175,7 @@ class Product {
     }
       
       /*3.Adding elements to our'cart' CLASS*/
+      //* I have no idea what's happening here. 
       addToCart() {
         const thisProduct = this;
      
