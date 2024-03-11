@@ -40,21 +40,21 @@ class Booking {
 
     initWidgets() {
         const thisBooking = this; 
-        //*How's AmountWidget instant connected to:
-        //Creating class instant
+        //Bottom widgets
+        //Creating class instant / activating widgets 
         thisBooking.peopleAmount = new AmountWidget(thisBooking.dom.peopleAmount);
         thisBooking.hoursAmount = new AmountWidget(thisBooking.dom.hoursAmount);
 
+        //Two widgets
         thisBooking.datePicker = new DatePicker(thisBooking.dom.datePicker);
         thisBooking.hourPicker = new HourPicker(thisBooking.dom.hourPicker);
+        console.log(thisBooking.peopleAmount);
 
-        //* this ⬇
         //Attaching event listener, listenting for changes taken place inside the the AmountWidget Above 
         thisBooking.dom.peopleAmount.addEventListener('change', function(event) {
             event.preventDefault();
 
         })
-        //* this ⬇
          //Attaching event listener to people counter widget
         thisBooking.dom.hoursAmount.addEventListener('change', function(event) {
             event.preventDefault();
