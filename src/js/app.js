@@ -84,7 +84,6 @@ const app = {
 
   initMenu() {  // <-- Cycling through each 'product' inside 'dataSource'  
     const thisApp = this;
-    console.log(thisApp)
     for(let productData in thisApp.data.products) {  
       // Createting a new object based on the cycled info, 1st 'product value, 2nd, passed the 'product' object property
       new Product(thisApp.data.products[productData].id, thisApp.data.products[productData]);
@@ -100,7 +99,6 @@ const app = {
 
     /* Fetching info from our json-server which is connected to src/db/app */
     fetch(url).then((rawResponse) => {
-      console.log(rawResponse)
       return rawResponse.json();     /*grabbing the data in json format */
     }).then((parsedResponse) => {    /* Auto changes to array format */ 
     /*Accsing the list of products in usable data type */

@@ -2,8 +2,8 @@
    "events": [
       {
         "id": 1,
-        "date": "2021-01-01",
-        "hour": "12:30",
+        "date": "2024-03-12",
+        "hour": "15:30",
         "table": 1,
         "repeat": false,
         "duration": 4,
@@ -32,8 +32,8 @@
       },
       {
         "id": 4,
-        "date": "2021-01-01",
-        "hour": "13:00",
+        "date": "2024-03-12",
+        "hour": "19:00",
         "table": 2,
         "repeat": "daily",
         "duration": 4,
@@ -42,7 +42,7 @@
       },
       {
         "id": 5,
-        "date": "2021-01-01",
+        "date": "2024-03-13",
         "hour": "18:00",
         "table": 2,
         "repeat": "daily",
@@ -51,7 +51,16 @@
         "starters": ["lemonWater"]
       }
     ],
-    "bookings": [],
+    "bookings": [
+      { "id": 2,
+      "date": "2024-03-12",
+      "hour": "16:00",
+      "table": 3,
+      "repeat": "daily",
+      "duration": 2,
+      "ppl": 3,
+      "starters": ["bread", "lemonWater"]}
+    ],
     
     "orders": [], 
 
