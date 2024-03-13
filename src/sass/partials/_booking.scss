@@ -198,3 +198,7 @@
     @include flex(row, flex-start, space-between);
     margin: ($base-size * 4) auto;
   }
+
+  .tableReserved {
+    border: 5px solid rgb(0, 255, 98);
+  }

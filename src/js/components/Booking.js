@@ -10,6 +10,7 @@ class Booking {
      thisBooking.render(element);
      thisBooking.initWidgets();
      thisBooking.getData();
+     thisBooking.obj = [];
     }
 
 
@@ -184,6 +185,78 @@ class Booking {
         }
     }
 
+    tableReserv(event) {
+        const thisBooking = this; 
+
+            let notReserved = false;
+            const table = event.target;
+
+            if (table.classList.contains('table') && !table.classList.contains('booked') && !table.classList.contains('tableReserved')) {
+                notReserved = true;
+            } else {
+                console.log(false)
+            }
+
+            if (notReserved === true) {
+                table.classList.add('tableReserved');
+                thisBooking.obj.push(table);
+                thisBooking.reservedTable = thisBooking.obj[0]; 
+              } else {
+                table.classList.remove('tableReserved');
+                thisBooking.obj[0].classList.remove('tableReserved');
+                thisBooking.obj.splice(0, 1)
+                console.log(false)
+              }
+
+            /*If Arry has greater than 1 numer, then we remove the class from first item
+            and then deleted from the array*/
+            if (thisBooking.obj.length > 1) {
+                thisBooking.obj[0].classList.remove('tableReserved');
+                thisBooking.obj.splice(0, 1)
+                console.log(false)
+            }
+    }
+
+    // tableReserv() {
+    //     const thisBooking = this; 
+    //     let obj = [];
+    //     // if(thisBooking.reservedTable) {
+    //     //     thisBooking.reservedTable.classList.remove('tableReserved');
+    //     // }
+
+    //         thisBooking.dom.floorPlan.addEventListener('click', (event) => {
+    //         event.preventDefault();
+    //         let notReserved = false;
+    //         const table = event.target;
+
+    //         if (table.classList.contains('table') && !table.classList.contains('booked') && !table.classList.contains('tableReserved')) {
+    //             notReserved = true;
+    //         } else {
+    //             console.log(false)
+    //         }
+
+    //         if (notReserved === true) {
+    //             table.classList.add('tableReserved');
+    //             obj.push(table);
+    //             thisBooking.reservedTable = obj[0]; 
+    //           } else {
+    //             table.classList.remove('tableReserved');
+    //             obj[0].classList.remove('tableReserved');
+    //             obj.splice(0, 1)
+    //             console.log(false)
+    //           }
+
+    //         /*If Arry has greater than 1 numer, then we remove the class from first item
+    //         and then deleted from the array*/
+    //         if (obj.length > 1) {
+    //             obj[0].classList.remove('tableReserved');
+    //             obj.splice(0, 1)
+    //             console.log(false)
+    //         }
+    //         console.log(obj);
+    //     });
+    // }
+
 
      render(element){
         const thisBooking = this;
@@ -208,10 +281,10 @@ class Booking {
             hourPicker: element.querySelector(select.widgets.hourPicker.wrapper), 
             // our tables
             tables: document.querySelectorAll(select.booking.tables),
+            //floor plan
+            floorPlan: document.querySelector(select.booking.Floorplan),
 
          }
-
-
      }
 
     initWidgets() {
@@ -235,9 +308,15 @@ class Booking {
             event.preventDefault();
         })
 
+        thisBooking.dom.floorPlan.addEventListener('click', function(event) {
+            thisBooking.tableReserv(event);
+        })
+
         thisBooking.dom.bookingWrapperDrop.addEventListener('updated', function() {
             thisBooking.updateDOM();
+            thisBooking.tableReserv()
         })
+
 
    }
 }
