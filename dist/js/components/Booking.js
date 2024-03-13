@@ -186,77 +186,35 @@ class Booking {
     }
 
     tableReserv(event) {
-        const thisBooking = this; 
 
-            let notReserved = false;
-            const table = event.target;
+       const thisBooking = this; 
+            
+        if (event) {
+        let notReserved = false;
+        const table = event.target;
 
-            if (table.classList.contains('table') && !table.classList.contains('booked') && !table.classList.contains('tableReserved')) {
-                notReserved = true;
+        if (table.classList.contains('table') && !table.classList.contains('booked') && !table.classList.contains('tableReserved')) {
+            notReserved = true;
+        }
+
+        if (notReserved === true) {
+            table.classList.add('tableReserved');
+            thisBooking.obj.push(table);
+            thisBooking.reservedTable = thisBooking.obj[0]; 
             } else {
-                console.log(false)
-            }
+            table.classList.remove('tableReserved');
+            thisBooking.obj[0].classList.remove('tableReserved');
+            thisBooking.obj.splice(0, 1)
+        }
 
-            if (notReserved === true) {
-                table.classList.add('tableReserved');
-                thisBooking.obj.push(table);
-                thisBooking.reservedTable = thisBooking.obj[0]; 
-              } else {
-                table.classList.remove('tableReserved');
-                thisBooking.obj[0].classList.remove('tableReserved');
-                thisBooking.obj.splice(0, 1)
-                console.log(false)
-              }
-
-            /*If Arry has greater than 1 numer, then we remove the class from first item
-            and then deleted from the array*/
-            if (thisBooking.obj.length > 1) {
-                thisBooking.obj[0].classList.remove('tableReserved');
-                thisBooking.obj.splice(0, 1)
-                console.log(false)
-            }
+        /*If Arry has greater than 1 numer, then we remove the class from first item
+        and then deleted from the array*/
+        if (thisBooking.obj.length > 1) {
+            thisBooking.obj[0].classList.remove('tableReserved');
+            thisBooking.obj.splice(0, 1)
+        }
     }
-
-    // tableReserv() {
-    //     const thisBooking = this; 
-    //     let obj = [];
-    //     // if(thisBooking.reservedTable) {
-    //     //     thisBooking.reservedTable.classList.remove('tableReserved');
-    //     // }
-
-    //         thisBooking.dom.floorPlan.addEventListener('click', (event) => {
-    //         event.preventDefault();
-    //         let notReserved = false;
-    //         const table = event.target;
-
-    //         if (table.classList.contains('table') && !table.classList.contains('booked') && !table.classList.contains('tableReserved')) {
-    //             notReserved = true;
-    //         } else {
-    //             console.log(false)
-    //         }
-
-    //         if (notReserved === true) {
-    //             table.classList.add('tableReserved');
-    //             obj.push(table);
-    //             thisBooking.reservedTable = obj[0]; 
-    //           } else {
-    //             table.classList.remove('tableReserved');
-    //             obj[0].classList.remove('tableReserved');
-    //             obj.splice(0, 1)
-    //             console.log(false)
-    //           }
-
-    //         /*If Arry has greater than 1 numer, then we remove the class from first item
-    //         and then deleted from the array*/
-    //         if (obj.length > 1) {
-    //             obj[0].classList.remove('tableReserved');
-    //             obj.splice(0, 1)
-    //             console.log(false)
-    //         }
-    //         console.log(obj);
-    //     });
-    // }
-
+}
 
      render(element){
         const thisBooking = this;
@@ -315,6 +273,7 @@ class Booking {
         thisBooking.dom.bookingWrapperDrop.addEventListener('updated', function() {
             thisBooking.updateDOM();
             thisBooking.tableReserv()
+            thisBooking.obj[0].classList.remove('tableReserved');
         })
 
 
