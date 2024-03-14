@@ -44,7 +44,10 @@ const select = {
       peopleAmount: '.people-amount',
       hoursAmount: '.hours-amount',
       tables: '.floor-plan .table',
-      Floorplan: '.floor-plan'
+      Floorplan: '.floor-plan',
+      btnBookTable: '.order-confirmation .btn-secondary',
+      bookingForm: '.booking-form',
+      startersWrapper: '.startersWrapper'
     },
     nav: {
         links: '.main-nav a',

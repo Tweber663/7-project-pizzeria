@@ -11,6 +11,8 @@ class Booking {
      thisBooking.initWidgets();
      thisBooking.getData();
      thisBooking.obj = [];
+     thisBooking.selectedStarters = [];
+     thisBooking.starters();
     }
 
 
@@ -74,6 +76,7 @@ class Booking {
         })
         .then(([bookings, eventsCurrent, eventsRepeat]) => {
             //Triggering a function and passing the info from the server
+            console.log(bookings);
             thisBooking.parseData(bookings, eventsCurrent, eventsRepeat)
 
 
@@ -152,7 +155,6 @@ class Booking {
         //saving the current value of our date & hour picker widges inside two new global variables
         thisBooking.date = thisBooking.datePicker.value; 
         thisBooking.hour = utils.hourToNumber(thisBooking.hourPicker.value); 
-        console.log(thisBooking.hour)
         //Respo for letting us know all tables are avail at selected day & time
         let allAvailable = false; 
 
@@ -188,7 +190,8 @@ class Booking {
     tableReserv(event) {
 
        const thisBooking = this; 
-            
+
+        //If argu passed from tableReserv is valid run the code below 
         if (event) {
         let notReserved = false;
         const table = event.target;
@@ -213,8 +216,74 @@ class Booking {
             thisBooking.obj[0].classList.remove('tableReserved');
             thisBooking.obj.splice(0, 1)
         }
+
+        } else if (thisBooking.obj[0]) {
+                thisBooking.obj[0].classList.remove('tableReserved');
+                thisBooking.obj = [];
+        }
     }
-}
+
+    starters() {
+        const thisBooking = this; 
+
+        let picked = false;  
+
+        thisBooking.dom.startersWrapp.addEventListener('change', function(event) {
+            let starter = event.target.value
+            
+            if (event.target.type === 'checkbox' && event.target.checked) {
+                picked = true; 
+            } 
+
+            if (picked == true) {
+                thisBooking.selectedStarters.push(starter)
+                picked = false;
+            } else if (!event.target.checked) {
+                const index = thisBooking.selectedStarters.indexOf(starter);
+                thisBooking.selectedStarters.splice(index, 1);
+            }
+            console.log(thisBooking.selectedStarters)
+        })
+
+    }
+
+    sendBooking(event) {
+        const thisBooking = this; 
+
+        const url = `${settings.db.url}/${settings.db.bookings}`;
+
+        const payload = {
+            date: thisBooking.date, 
+            hour: utils.numberToHour(thisBooking.hour),
+            table: '',
+            duration: thisBooking.hoursAmount.correctValue,
+            ppl: thisBooking.peopleAmount.correctValue,
+            starters: thisBooking.selectedStarters,
+            phone:  event.target.phone.value, 
+            adress: event.target.address.value,
+        }
+
+        thisBooking.obj == null || []? payload.table = null : payload.table = thisBooking.obj[0];
+
+        console.log(payload);
+        console.log(thisBooking);
+
+        //Prepering fetch settings
+        const options = {
+            method: 'POST',
+            headers: {'Content-Type': 'booking/json',}, 
+            body: JSON.stringify(payload),
+        };
+        /*Launching our payload into SPACE!*/
+        fetch(url, options).then((response) => {
+            return response;
+        }).then((convertedResponse) => console.log(convertedResponse), {
+        }).catch((err) => console.log(err));
+
+        setTimeout(() => {
+            fetch()
+        }, 1000);
+     }
 
      render(element){
         const thisBooking = this;
@@ -241,7 +310,12 @@ class Booking {
             tables: document.querySelectorAll(select.booking.tables),
             //floor plan
             floorPlan: document.querySelector(select.booking.Floorplan),
-
+            //Bbook table btn 
+            btnBookTable: document.querySelector(select.booking.btnBookTable),
+            //booking form 
+            bookingForm: document.querySelector(select.booking.bookingForm),
+            //checkboxes
+            startersWrapp: document.querySelector(select.booking.startersWrapper),
          }
      }
 
@@ -267,16 +341,22 @@ class Booking {
         })
 
         thisBooking.dom.floorPlan.addEventListener('click', function(event) {
+            event.preventDefault();
             thisBooking.tableReserv(event);
         })
 
-        thisBooking.dom.bookingWrapperDrop.addEventListener('updated', function() {
+        thisBooking.dom.bookingWrapperDrop.addEventListener('updated', function(event) {
+            event.preventDefault();
             thisBooking.updateDOM();
-            thisBooking.tableReserv()
-            thisBooking.obj[0].classList.remove('tableReserved');
+            //[Every time time or date is changed run the tableReserv() funciton and remove current reserved table
+            thisBooking.tableReserv();
+            //]
         })
 
-
+        thisBooking.dom.bookingForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            thisBooking.sendBooking(event);
+        })
    }
 }
 export default Booking;
