@@ -76,14 +76,12 @@ class Booking {
         })
         .then(([bookings, eventsCurrent, eventsRepeat]) => {
             //Triggering a function and passing the info from the server
-            console.log(bookings);
             thisBooking.parseData(bookings, eventsCurrent, eventsRepeat)
 
 
         }).catch((err) => console.log(err));
     }
 
-    
 
     parseData(bookings, eventsCurrent, eventsRepeat) {
         const thisBooking = this; 
@@ -117,9 +115,7 @@ class Booking {
            }
         }
 
-        // console.log('thisBooking.booked', thisBooking.booked)
-        //triggering a function
-        thisBooking.updateDOM();
+
     } 
 
     makeBooked(date, hour, duration, table) {
@@ -142,10 +138,13 @@ class Booking {
              if (typeof thisBooking.booked[date][hourBlock] == 'undefined') {
              thisBooking.booked[date][hourBlock] = [];
              }
-
              //Pushes the fetched 'eventsCurret' into the thisBooking.booked obj thanks to setting up the code above using the two id statmnet 
              thisBooking.booked[date][hourBlock].push(table);
        } 
+
+          // console.log('thisBooking.booked', thisBooking.booked)
+        //triggering a function
+        thisBooking.updateDOM();
     } 
 
     //method uses thisBooking.booked
@@ -263,26 +262,20 @@ class Booking {
             adress: event.target.address.value,
         }
 
-        thisBooking.obj == null || []? payload.table = null : payload.table = thisBooking.obj[0];
-
-        console.log(payload);
-        console.log(thisBooking);
+        thisBooking.obj == null? payload.table = null : payload.table = Number(thisBooking.obj[0].getAttribute('data-table'));
 
         //Prepering fetch settings
         const options = {
             method: 'POST',
-            headers: {'Content-Type': 'booking/json',}, 
+            headers: {'Content-Type': 'application/json',}, 
             body: JSON.stringify(payload),
         };
         /*Launching our payload into SPACE!*/
         fetch(url, options).then((response) => {
-            return response;
-        }).then((convertedResponse) => console.log(convertedResponse), {
+            return response.json()
+        }).then((converRespo) => 
+        thisBooking.makeBooked(converRespo.date, converRespo.hour, converRespo.duration, converRespo.table),{
         }).catch((err) => console.log(err));
-
-        setTimeout(() => {
-            fetch()
-        }, 1000);
      }
 
      render(element){
@@ -319,45 +312,45 @@ class Booking {
          }
      }
 
-    initWidgets() {
-        const thisBooking = this; 
-        //Bottom widgets
-        //Creating class instant / activating widgets 
-        thisBooking.peopleAmount = new AmountWidget(thisBooking.dom.peopleAmount);
-        thisBooking.hoursAmount = new AmountWidget(thisBooking.dom.hoursAmount);
+     initWidgets() {
+                const thisBooking = this; 
+                //Bottom widgets
+                //Creating class instant / activating widgets 
+                thisBooking.peopleAmount = new AmountWidget(thisBooking.dom.peopleAmount);
+                thisBooking.hoursAmount = new AmountWidget(thisBooking.dom.hoursAmount);
 
-        //Two widgets
-        thisBooking.datePicker = new DatePicker(thisBooking.dom.datePicker);
-        thisBooking.hourPicker = new HourPicker(thisBooking.dom.hourPicker);
+                //Two widgets
+                thisBooking.datePicker = new DatePicker(thisBooking.dom.datePicker);
+                thisBooking.hourPicker = new HourPicker(thisBooking.dom.hourPicker);
 
-        //Attaching event listener, listenting for changes taken place inside the the AmountWidget Above 
-        thisBooking.dom.peopleAmount.addEventListener('change', function(event) {
-            event.preventDefault();
+                //Attaching event listener, listenting for changes taken place inside the the AmountWidget Above 
+                thisBooking.dom.peopleAmount.addEventListener('change', function(event) {
+                    event.preventDefault();
 
-        })
-         //Attaching event listener to people counter widget
-        thisBooking.dom.hoursAmount.addEventListener('change', function(event) {
-            event.preventDefault();
-        })
+                })
+                //Attaching event listener to people counter widget
+                thisBooking.dom.hoursAmount.addEventListener('change', function(event) {
+                    event.preventDefault();
+                })
 
-        thisBooking.dom.floorPlan.addEventListener('click', function(event) {
-            event.preventDefault();
-            thisBooking.tableReserv(event);
-        })
+                thisBooking.dom.floorPlan.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    thisBooking.tableReserv(event);
+                })
 
-        thisBooking.dom.bookingWrapperDrop.addEventListener('updated', function(event) {
-            event.preventDefault();
-            thisBooking.updateDOM();
-            //[Every time time or date is changed run the tableReserv() funciton and remove current reserved table
-            thisBooking.tableReserv();
-            //]
-        })
+                thisBooking.dom.bookingWrapperDrop.addEventListener('updated', function(event) {
+                    event.preventDefault();
+                    thisBooking.updateDOM();
+                    //[Every time time or date is changed run the tableReserv() funciton and remove current reserved table
+                    thisBooking.tableReserv();
+                    //]
+                })
 
-        thisBooking.dom.bookingForm.addEventListener('submit', function(event) {
-            event.preventDefault();
-            thisBooking.sendBooking(event);
-        })
-   }
+                thisBooking.dom.bookingForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    thisBooking.sendBooking(event);
+                })
+     }
 }
 export default Booking;
 

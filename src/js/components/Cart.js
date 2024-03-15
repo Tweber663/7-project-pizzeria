@@ -96,6 +96,8 @@ class Cart {
       //We inser this object inside our payload obj
         payload.products.push(prod.getData());
       }
+
+      console.log(JSON.stringify(payload))
   
       //Prepering fetch settings
       const options = {
