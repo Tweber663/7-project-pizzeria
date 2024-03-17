@@ -1,0 +1,166 @@
+.home-wrapper {
+    margin: 42px auto;
+    padding: 72px 48px;
+    background: #fff;
+    border-bottom: 1px solid #e6e6e6;
+    border-radius: 4px;
+}
+
+.top-section {
+    margin: 50px 0;
+}
+.top-flex-column {
+    display: flex;
+    flex-direction: row;
+}
+
+.top-flex-element {
+    display: flex;
+}
+
+.top-flex-element img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.top-flex-element-right {
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+.title-wrapper {
+    width: 200px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate((-50%, -50%));
+}
+
+.bottom-flex-element {
+    background-color: #ff6b6b;
+    height: 100px;
+    position: relative;
+    border-radius: 4px;
+}
+
+.title-wrapper {
+    text-align: center;
+    display: inline-block;
+}
+
+.title-wrapper h3, h5 {
+    margin: 0;
+    padding: 0;
+    color: white
+}
+.flex-1 {
+    flex: 1;
+    position: relative;
+}
+
+.flex-2 {
+    flex: 3;
+    position: relative;
+}
+
+//Top section hover animation
+
+.title-wrapper h5 {
+  position: absolute;
+  bottom: -30px;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  transform: translateY(100%);
+  transition: opacity 0.5s, transform 0.5s;
+}
+
+.bottom-flex-element:hover h5 {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.top-flex-element:hover h5 {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+.title-wrapper h3 {
+    position: absolute;
+    bottom: -12px;
+    left: 0;
+    width: 100%;
+    opacity: 1;
+    transform: translateY(20%);
+    transition: opacity 0.5s, transform 0.5s;
+  }
+  
+  .bottom-flex-element:hover h3 {
+    transform: translateY(0);
+  }
+ 
+  .top-flex-element:hover h3 {
+    transform: translateY(0);
+  }
+
+
+//Carusel 
+
+.carousel-fex-column {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.carousel-cell {
+  width: 100%;
+  height: 300px;
+  counter-increment: gallery-cell;
+}
+
+.carousel img {
+    height: 200px;
+    width: 230px;
+    object-fit: cover;
+}
+
+//Gallery 
+
+.gallery-flex-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.gallery-flex-column {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.gallery-element {
+    object-fit: cover;
+    height: 200px;
+    padding: 5px 0;
+}
+
+.gallery-middle {
+    padding: 0 10px;
+}
+
+.gallery-element img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+
+
+
+
+
+

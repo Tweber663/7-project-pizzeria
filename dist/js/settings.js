@@ -9,7 +9,11 @@ const select = {
       cart: '#cart',
       pages: '#pages',
       booking: '.booking-wrapper',
-
+    },
+    home: {
+      homePageDrop: '#home',
+      homePageWrapper: '.home-wrapper',
+      homePagePayload: '#template-home-page',
     },
     all: {
       menuProducts: '#product-list > .product',
@@ -138,6 +142,8 @@ const templates = {
     cartProduct: Handlebars.compile(document.querySelector(select.templateOf.cartProduct).innerHTML),
     // CODE ADDED END
     bookingWidget: Handlebars.compile(document.querySelector(select.templateOf.bookingWidget).innerHTML),
+    //Home wrapper Payload
+    homePagePayload: Handlebars.compile(document.querySelector(select.home.homePagePayload).innerHTML),
   };
 
 export {templates, settings, classNames, select} 

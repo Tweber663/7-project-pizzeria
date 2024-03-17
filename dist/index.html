@@ -10,6 +10,7 @@
   <!-- date picker plugin -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <!-- hour picker plugin -->
+  <link rel="stylesheet" href="vendor/flickity.min.css" media="screen">
   <link rel="stylesheet" href="vendor/range-slider.min.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -24,6 +25,7 @@
         </div>
 
         <div class="main-nav">
+          <a href="#home">Home</a>
           <a href="#order">Order</a>
           <a href="#booking">Booking</a>
         </div>
@@ -66,6 +68,9 @@
   </header>
 
   <div id="pages">
+    <section id="home">
+      <div class="home-wrapper container"> </div>
+    </section>
     <section id="order">
       <div id="product-list" class="product-list container"></div>
     </section>
@@ -73,6 +78,103 @@
       <div class="booking-wrapper container"></div>
     </section>
   </div>
+
+  <script id="template-home-page" type="text/x-handlebars-template">
+    <div>
+    <div class="top-section">
+      
+        <div class="top-flex-column">
+          <div class="top-flex-element top-flex-element-right flex-1">
+            <img src="images/assets/pizza-1.jpg" alt="">
+            <div class="title-wrapper">
+              <h3 class="page__title">Order online</h3>
+              <h5>DONT WAIT!</h5>
+            </div>
+          </div>
+          <div class="top-flex-element flex-1">
+            <img src="images/assets/pizza-2.jpg" alt="">
+            <div class="title-wrapper">
+              <h3 class="page__title">BOOK A TABLE</h3>
+              <h5>JUST FOR YOU:)</h5>
+            </div>
+          </div>
+        </div>
+
+        
+        <div class="top-flex-row">
+          <div class=bottom-flex-element flex-1">
+            <div class="title-wrapper">
+              <h3 class="page__title">Opening hours</h3>
+              <h5>TUE-SUN, 12PM-12AM</h5>
+            </div>
+          </div>
+      </div>
+    </div>
+    <!-- Carousel -->
+    <div class="carousel" data-flickity='{ "cellAlign": "left"}'>
+      <div class="carousel-cell flex-1">
+        <div class="carousel-fex-column">
+          <div class="flex-1">
+            <img src="images/assets/pizza-1.jpg" alt="">
+          </div>
+          <div class="flex-3"> 
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae dolor quidem tempore
+          </div>
+        </div>
+      </div>
+      <div class="carousel-cell flex-1">
+        <div class="carousel-fex-column">
+          <div class="flex-1">
+            <img src="images/assets/pizza-1.jpg" alt="">
+          </div>
+          <div class="flex-3"> 
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae dolor quidem tempore
+          </div>
+        </div>
+      </div>
+      <div class="carousel-cell flex-1">
+        <div class="carousel-fex-column">
+          <div class="flex-1">
+            <img src="images/assets/pizza-1.jpg" alt="">
+          </div>
+          <div class="flex-3"> 
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae dolor quidem tempore
+          </div>
+        </div>
+      </div>
+     </div>
+     <!-- Carousel -->
+     <br><br><br><br>
+     <div class="gallery-menu">
+      <div class="gallery-flex-row">
+        <div class="gallery-flex-column">
+          <div class="gallery-element">
+            <img src="images/assets/pizza-1.jpg" alt="">
+          </div>
+          <div class="gallery-element">
+            <img src="images/assets/pizza-2.jpg" alt="">
+          </div>
+        </div>
+        <div class="gallery-flex-column gallery-middle">
+          <div class="gallery-element">
+            <img src="images/assets/pizza-1.jpg" alt="">
+          </div>
+          <div class="gallery-element">
+            <img src="images/assets/pizza-1.jpg" alt="">
+          </div>
+        </div>
+        <div class="gallery-flex-column">
+          <div class="gallery-element">
+            <img src="images/assets/pizza-1.jpg" alt="">
+          </div>
+          <div class="gallery-element">
+            <img src="images/assets/pizza-1.jpg" alt="">
+          </div>
+        </div>
+      </div>
+     </div>
+    </div>
+  </script>
 
   <script id="template-booking-widget" type="text/x-handlebars-template">
     <div class="booking-widget">
@@ -251,6 +353,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.0/handlebars.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script src="vendor/range-slider.min.js"></script>
+  <script src="vendor/flickity.pkgd.min.js"></script>
   <script src="js/app.js" type="module"></script>
 </body>
 </html>

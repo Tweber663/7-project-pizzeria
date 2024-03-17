@@ -2,8 +2,14 @@ import { settings, select, classNames } from "./settings.js";
 import Product from "./components/Product.js";
 import Cart from "./components/Cart.js";
 import Booking from "./components/Booking.js";
+import Home from "./components/Home.js";
 
 const app = { 
+
+  initHome() {
+    new Home();
+  },
+
  //Respo for navigating between pages
   initPages() {
     const thisApp = this;
@@ -11,7 +17,7 @@ const app = {
     //this.pages saves info from query inside the 'app' obj under 'pages' name
     // We query pages wrappers where handlebars script will be placed
     thisApp.pages = document.querySelector(select.containerOf.pages).children;
-
+    console.log(thisApp.pages);
         
     //Grabbing links responsible for changing between websites
     thisApp.navLinks = document.querySelectorAll(select.nav.links);
@@ -22,7 +28,6 @@ const app = {
     
     //**[Respo for displaying our website and checking for errors
     let pageMatchingHash = thisApp.pages[0].id;
-
   
     //if current open page (url hash) equals any of the pages 'id' the matching page will load 
     for (let page of thisApp.pages) {
@@ -134,6 +139,8 @@ const app = {
     thisApp.initData(); // 1st
 
     thisApp.initPages();
+
+    thisApp.initHome();
 
     thisApp.initCart();
 
