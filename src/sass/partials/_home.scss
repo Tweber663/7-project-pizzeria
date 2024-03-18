@@ -15,7 +15,12 @@
 }
 
 .top-flex-element {
+    position: relative;
     display: flex;
+}
+.top-flex-element a {
+    margin: 0;
+    padding: 0;
 }
 
 .top-flex-element img {
@@ -36,6 +41,8 @@
     top: 50%;
     left: 50%;
     transform: translate((-50%, -50%));
+    text-align: center;
+    display: inline-block;
 }
 
 .bottom-flex-element {
@@ -45,15 +52,11 @@
     border-radius: 4px;
 }
 
-.title-wrapper {
-    text-align: center;
-    display: inline-block;
-}
 
 .title-wrapper h3, h5 {
     margin: 0;
     padding: 0;
-    color: white
+    color: white;
 }
 .flex-1 {
     flex: 1;
@@ -108,6 +111,10 @@
 
 //Carusel 
 
+.carousel {
+    margin-top: 80px;
+}
+
 .carousel-fex-column {
     display: flex;
     flex-direction: row;
@@ -116,15 +123,24 @@
 
 .carousel-cell {
   width: 100%;
-  height: 300px;
   counter-increment: gallery-cell;
 }
 
 .carousel img {
     height: 200px;
-    width: 230px;
+    width: 200px;
     object-fit: cover;
+    border-radius: 4px;
 }
+
+.carousel-title {
+    padding: 0 30px;
+}
+
+.review-name {
+    font-family: 'Times', serif;
+}
+
 
 //Gallery 
 
@@ -144,6 +160,7 @@
     object-fit: cover;
     height: 200px;
     padding: 5px 0;
+    position: relative;
 }
 
 .gallery-middle {
@@ -155,7 +172,129 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border-radius: 4px;
 }
+
+.gallery-flex-column-bottom {
+    display: none;
+}
+
+
+
+//gallery hover 
+
+
+.icons .fa-heart {
+    color: red;
+}
+
+.icons .fa-share-nodes {
+    color: rgb(137, 0, 0);
+}
+
+.gallery-element {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .icons {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 1s ease, transform 0.5s ease;
+    z-index: 1;
+  }
+  
+  .gallery-element:hover .icons {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  
+  .icons i {
+    display: inline-block;
+    font-size: 20px; /* Adjust the size as needed */
+    transition: font-size 1s ease;
+  }
+  
+  .gallery-element:hover .icons .fa-heart{
+    font-size: 30px; /* Larger size for the heart icon */
+  }
+
+  .gallery-element img {
+    z-index: 0;
+    opacity: 1;
+    transition: opacity 1s ease, transform 0.5s ease;
+  }
+
+  .gallery-element:hover img {
+    opacity: 0.7;
+    background-color: grey;
+  }
+
+  //Footer
+
+  footer a {
+    color: #ff6b6b;
+  }
+
+@media (max-width: 768px) {
+    //Top section 
+    .top-flex-column {
+        flex-direction: column;
+    }
+    .top-flex-element-right {
+        margin-right: 0px;
+        margin-bottom: 5px;
+    }
+
+    .bottom-flex-element {
+        margin-top: 5px;
+    }
+   //Top section 
+   
+    .carousel-fex-column {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .carousel-cell {
+      width: 100%;
+      counter-increment: gallery-cell;
+    }
+    
+    .carousel img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+    }
+    
+    .carousel-title {
+        padding: 0 30px;
+    }
+
+    //Gallery 
+    .gallery-flex-column-right {
+        display: none;
+    }
+    .gallery-flex-column-bottom {
+        display: flex;
+        flex-direction: row;
+    }
+    .gallery-middle {
+        padding-right: 0;
+    }
+
+    .ge-right {
+        padding-left: 10px;
+    }
+}
+
+
+
+
+
 
 
 

@@ -14,6 +14,7 @@ const select = {
       homePageDrop: '#home',
       homePageWrapper: '.home-wrapper',
       homePagePayload: '#template-home-page',
+      buttonLinks: 'a',
     },
     all: {
       menuProducts: '#product-list > .product',

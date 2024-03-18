@@ -82,30 +82,34 @@
   <script id="template-home-page" type="text/x-handlebars-template">
     <div>
     <div class="top-section">
-      
         <div class="top-flex-column">
           <div class="top-flex-element top-flex-element-right flex-1">
             <img src="images/assets/pizza-1.jpg" alt="">
+            <a href="#order">
             <div class="title-wrapper">
               <h3 class="page__title">Order online</h3>
               <h5>DONT WAIT!</h5>
             </div>
+            </a>
           </div>
           <div class="top-flex-element flex-1">
             <img src="images/assets/pizza-2.jpg" alt="">
-            <div class="title-wrapper">
+            <div class="title-wrapper"> 
+              <a href="#booking">
               <h3 class="page__title">BOOK A TABLE</h3>
               <h5>JUST FOR YOU:)</h5>
+            </a>
             </div>
           </div>
         </div>
-
-        
+  
         <div class="top-flex-row">
           <div class=bottom-flex-element flex-1">
             <div class="title-wrapper">
+              <a href="#home">
               <h3 class="page__title">Opening hours</h3>
               <h5>TUE-SUN, 12PM-12AM</h5>
+              </a>
             </div>
           </div>
       </div>
@@ -114,31 +118,37 @@
     <div class="carousel" data-flickity='{ "cellAlign": "left"}'>
       <div class="carousel-cell flex-1">
         <div class="carousel-fex-column">
-          <div class="flex-1">
-            <img src="images/assets/pizza-1.jpg" alt="">
+          <div class="carousel-img">
+            <img src="images/assets/pizza-3.jpg" alt="">
           </div>
-          <div class="flex-3"> 
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae dolor quidem tempore
-          </div>
-        </div>
-      </div>
-      <div class="carousel-cell flex-1">
-        <div class="carousel-fex-column">
-          <div class="flex-1">
-            <img src="images/assets/pizza-1.jpg" alt="">
-          </div>
-          <div class="flex-3"> 
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae dolor quidem tempore
+          <div class="carousel-title"> 
+            <h3 class="product__params-title">Amazing Service!</h3>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae dolor quidem tempore </p>
+            <p class="review-name">-Thomas Weber</p>
           </div>
         </div>
       </div>
       <div class="carousel-cell flex-1">
         <div class="carousel-fex-column">
-          <div class="flex-1">
-            <img src="images/assets/pizza-1.jpg" alt="">
+          <div class="carousel-img">
+            <img src="images/assets/pizza-4.jpg" alt="">
           </div>
-          <div class="flex-3"> 
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae dolor quidem tempore
+          <div class="carousel-title"> 
+            <h3 class="product__params-title">Amazing Service!</h3>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae dolor quidem tempore </p>
+            <p class="review-name">-Thomas Weber</p>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-cell flex-1">
+        <div class="carousel-fex-column">
+          <div class="carousel-img">
+            <img src="images/assets/pizza-5.jpg" alt="">
+          </div>
+          <div class="carousel-title"> 
+            <h3 class="product__params-title">Amazing Service!</h3>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae dolor quidem tempore </p>
+            <p class="review-name">-Thomas Weber</p>
           </div>
         </div>
       </div>
@@ -149,30 +159,75 @@
       <div class="gallery-flex-row">
         <div class="gallery-flex-column">
           <div class="gallery-element">
-            <img src="images/assets/pizza-1.jpg" alt="">
+            <div class="icons">
+              <i class="fa-solid fa-heart"></i>
+              <i class="fa-solid fa-share-nodes"></i>
+            </div>
+            <img src="images/assets/pizza-6.jpg" alt="">
           </div>
           <div class="gallery-element">
-            <img src="images/assets/pizza-2.jpg" alt="">
+            <div class="icons">
+              <i class="fa-solid fa-heart"></i>
+              <i class="fa-solid fa-share-nodes"></i>
+            </div>
+            <img src="images/assets/pizza-7.jpg" alt="">
           </div>
         </div>
         <div class="gallery-flex-column gallery-middle">
           <div class="gallery-element">
-            <img src="images/assets/pizza-1.jpg" alt="">
+            <div class="icons">
+              <i class="fa-solid fa-heart"></i>
+              <i class="fa-solid fa-share-nodes"></i>
+            </div>
+            <img src="images/assets/pizza-8.jpg" alt="">
           </div>
           <div class="gallery-element">
-            <img src="images/assets/pizza-1.jpg" alt="">
+            <div class="icons">
+              <i class="fa-solid fa-heart"></i>
+              <i class="fa-solid fa-share-nodes"></i>
+            </div>
+            <img src="images/assets/pizza-9.jpg" alt="">
           </div>
         </div>
-        <div class="gallery-flex-column">
+        <div class="gallery-flex-column gallery-flex-column-right">
           <div class="gallery-element">
+            <div class="icons">
+              <i class="fa-solid fa-heart"></i>
+              <i class="fa-solid fa-share-nodes"></i>
+            </div>
             <img src="images/assets/pizza-1.jpg" alt="">
           </div>
           <div class="gallery-element">
-            <img src="images/assets/pizza-1.jpg" alt="">
+            <div class="icons">
+              <i class="fa-solid fa-heart"></i>
+              <i class="fa-solid fa-share-nodes"></i>
+            </div>
+            <img src="images/assets/pizza-2.jpg" alt="">
           </div>
         </div>
       </div>
+
+      <div class="gallery-flex-column gallery-flex-column-bottom">
+        <div class="gallery-element flex-1">
+          <div class="icons">
+            <i class="fa-solid fa-heart"></i>
+            <i class="fa-solid fa-share-nodes"></i>
+          </div>
+          <img src="images/assets/pizza-1.jpg" alt="">
+        </div>
+        <div class="gallery-element ge-right flex-1">
+          <div class="icons">
+            <i class="fa-solid fa-heart"></i>
+            <i class="fa-solid fa-share-nodes"></i>
+          </div>
+          <img src="images/assets/pizza-2.jpg" alt="">
+        </div>
+      </div>
+      
      </div>
+     <footer>
+      <a href="#"><p>View more on Instagram</p></a>
+    </footer>
     </div>
   </script>
 
@@ -350,6 +405,7 @@
     </article> <!-- .product -->
   </script>
 
+  <script src="https://kit.fontawesome.com/02dbe1fffb.js" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.0/handlebars.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script src="vendor/range-slider.min.js"></script>

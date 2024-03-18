@@ -6,10 +6,6 @@ import Home from "./components/Home.js";
 
 const app = { 
 
-  initHome() {
-    new Home();
-  },
-
  //Respo for navigating between pages
   initPages() {
     const thisApp = this;
@@ -17,14 +13,16 @@ const app = {
     //this.pages saves info from query inside the 'app' obj under 'pages' name
     // We query pages wrappers where handlebars script will be placed
     thisApp.pages = document.querySelector(select.containerOf.pages).children;
-    console.log(thisApp.pages);
-        
+
     //Grabbing links responsible for changing between websites
     thisApp.navLinks = document.querySelectorAll(select.nav.links);
 
+    const homeClass = new Home();
+    thisApp.homeLinks = homeClass.dom.homeAtags;
+    console.log(thisApp.homeLinks);
+
     //Grabbing the hash of the current page
     const idFromHash = window.location.hash.replace('#/', '');
-
     
     //**[Respo for displaying our website and checking for errors
     let pageMatchingHash = thisApp.pages[0].id;
@@ -45,6 +43,23 @@ const app = {
  
     //event listener to link buttons
     for (let link of thisApp.navLinks) {
+      link.addEventListener('click', function(event) {
+        event.preventDefault();
+        //Saving clicked element info inside the 'clcikedElement' const
+        const clickedElement = this;
+
+        //get page href id from the link and remove #
+        const id = clickedElement.getAttribute('href').replace('#', '');
+
+        //trigger activatePage func with the href ID  
+        thisApp.activatePage(id);
+
+        //We're adding the page id to the page url. the '/' prevents for refreshing the page. 
+        window.location.hash = '#/' + id; 
+      })
+    }
+
+    for (let link of thisApp.homeLinks) {
       link.addEventListener('click', function(event) {
         event.preventDefault();
         //Saving clicked element info inside the 'clcikedElement' const
@@ -137,10 +152,8 @@ const app = {
   init() { //Responsbile for triggering all the functions. 
     const thisApp = this; 
     thisApp.initData(); // 1st
-
+  
     thisApp.initPages();
-
-    thisApp.initHome();
 
     thisApp.initCart();
 

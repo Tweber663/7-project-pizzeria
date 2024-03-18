@@ -6,6 +6,7 @@ class Home {
     constructor() {
         const thisHome = this; 
         thisHome.render();
+        thisHome.pageInit();
     }
 
     render() {
@@ -21,9 +22,10 @@ class Home {
         const htmlElement = templates.homePagePayload(thisHome.dom.homePageDrop);
         const DOMelement = utils.createDOMFromHTML(htmlElement);
 
+        thisHome.dom.DOMelement = DOMelement;
+
         thisHome.dom.homePageDropWrapper.appendChild(DOMelement);
     
-
         thisHome.initWidget(DOMelement.querySelector('.carousel'));
     }
 
@@ -37,6 +39,11 @@ class Home {
         imagesLoaded: true,
         autoPlay: true,
         });
+    }
+
+    pageInit() {
+        const thisHome = this; 
+        thisHome.dom.homeAtags = thisHome.dom.DOMelement.querySelectorAll('a');
     }
 }
 
