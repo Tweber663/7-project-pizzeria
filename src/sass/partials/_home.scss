@@ -156,23 +156,8 @@
     flex: 1;
 }
 
-.gallery-element {
-    object-fit: cover;
-    height: 200px;
-    padding: 5px 0;
-    position: relative;
-}
-
 .gallery-middle {
     padding: 0 10px;
-}
-
-.gallery-element img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 4px;
 }
 
 .gallery-flex-column-bottom {
@@ -193,8 +178,11 @@
 }
 
 .gallery-element {
-    position: relative;
     overflow: hidden;
+    object-fit: cover;
+    height: 200px;
+    padding: 5px 0;
+    position: relative;
   }
   
   .icons {
@@ -226,6 +214,11 @@
     z-index: 0;
     opacity: 1;
     transition: opacity 1s ease, transform 0.5s ease;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
   }
 
   .gallery-element:hover img {
